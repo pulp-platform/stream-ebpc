@@ -1,32 +1,54 @@
-
-# Table of Contents
-
-1.  [Extended Bit-Plane Compression Hardware Architecture](#orgd9d81eb)
-    1.  [Architecture](#orgb835e23)
-        1.  [Encoder](#org11f3715)
-        2.  [Decoder](#orga89bc33)
-        3.  [Interfaces](#org7fc1d72)
-        4.  [Parameters](#orgd3f466b)
-            1.  [Constraints on parameters](#org1b59181)
-    2.  [Operation](#org9c5317c)
-        1.  [Encoder](#org6a7701d)
-            1.  [Padding](#orgfd86d11)
-        2.  [Decoder](#orgb9a798e)
-        3.  [Encoded Stream Format](#orga20eb8f)
-    3.  [Simulating the Designs](#org4b3c093)
-    4.  [Contact](#org85ed66f)
+Copyright (c) 2019 ETH Zurich, Georg Rutishauser, Lukas Cavigelli, Luca Benini
 
 
-
-<a id="orgd9d81eb"></a>
-
-# Extended Bit-Plane Compression Hardware Architecture
+# Extended Bit-Plane Compression Hardware Implementation
 
 This repository contains the open-source release of the hardware
 implementation of the **Extended Bit-Plane Compression** scheme described in the
 paper "[EBPC: Extended Bit-Plane Compression for Deep Neural Network Inference
 and Training Accelerators](https://arxiv.org/abs/1908.11645)". Two top-level modules are provided: An encoder and
 a decoder. The implementation language is SystemVerilog.
+
+
+If you find this work useful in your research, please cite
+
+```
+@article{epbc2019,
+  title={{EBPC}: {E}xtended {B}it-{P}lane {C}ompression for {D}eep {N}eural {N}etwork {I}nference and {T}raining {A}ccelerators},
+  author={Cavigelli, Lukas and Rutishauser, Georg and Benini, Luca},
+  year={2019}
+}
+@inproceedings{cavigelli2018bitPlaneCompr,
+  title={{E}xtended {B}it-{P}lane {C}ompression for {C}onvolutional {N}eural {N}etwork {A}ccelerators},
+  author={Cavigelli, Lukas and Benini, Luca},
+  booktitle={Proc. IEEE AICAS}, year={2018}
+}
+```
+The paper is available on arXiv at https://arxiv.org/abs/1908.11645.
+
+The code to reproduce the non-hardware experimental results 
+is available at https://github.com/lukasc-ch/ExtendedBitPlaneCompression. 
+
+## Table of Contents
+
+
+1.  [Architecture](#orgb835e23)
+    1.  [Encoder](#org11f3715)
+    2.  [Decoder](#orga89bc33)
+    3.  [Interfaces](#org7fc1d72)
+    4.  [Parameters](#orgd3f466b)
+        1.  [Constraints on parameters](#org1b59181)
+2.  [Operation](#org9c5317c)
+    1.  [Encoder](#org6a7701d)
+        1.  [Padding](#orgfd86d11)
+    2.  [Decoder](#orgb9a798e)
+    3.  [Encoded Stream Format](#orga20eb8f)
+3.  [Simulating the Designs](#org4b3c093)
+4.  [Contact](#org85ed66f)
+
+
+
+
 
 
 <a id="orgb835e23"></a>
