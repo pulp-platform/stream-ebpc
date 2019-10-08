@@ -1,3 +1,4 @@
+Copyright (c) 2019 ETH Zurich, Georg Rutishauser, Lukas Cavigelli, Luca Benini
 
 
 
