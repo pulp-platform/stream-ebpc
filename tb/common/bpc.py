@@ -283,6 +283,35 @@ def BPC_words(values, block_size=8, variant='paper', word_w=8, dbg_fn=None):
 
 
 
+##############################
+# Zero/Nonzero Stream/ZRLE
+##############################
+def ZNZ_ZRLE(values, max_burst_len=16):
+  znz_stream = [0 if el == 0 else 1 for el in values]
+  zrle_stream = ''
+  zero_run = 0
+  bw_zrle = math.ceil(math.log2(max_burst_len))
+  for el in znz_stream:
+      if el == 0:
+          if zero_run == max_burst_len-1:
+            zrle_stream += '0' + bin(max_burst_len-1)[2:].zfill(bw_zrle)
+            zero_run = 0
+          else:
+            zero_run += 1
+      else:
+          if zero_run != 0:
+            zrle_stream += ('0' + bin(zero_run-1)[2:].zfill(bw_zrle))
+            zero_run = 0
+          zrle_stream += '1'
+  # catch any remaining zero run
+  if zero_run != 0:
+    zrle_stream += ('0' + bin(zero_run-1)[2:].zfill(bw_zrle))
+  return zrle_stream
+
+def ZRLE_words(values, max_burst_len, wordwidth):
+  zrle_stream = ZNZ_ZRLE(values, max_burst_len)
+  zrle_stream = zero_pad_bitstr(zrle_stream, wordwidth)
+  return split_str(zrle_stream, wordwidth)
 
 
 

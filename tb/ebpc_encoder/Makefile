@@ -10,12 +10,13 @@
 TOPLEVEL_LANG ?= verilog
 
 
-WPWD=$(shell sh -c 'pwd -W')
 PWD=$(shell pwd)
 SRC_DIR = $(PWD)/../../src
 ENC_SRC_DIR = $(SRC_DIR)/encoder
-SIM_ARGS = "-t 1ps -do '../sim.do' -debugdb"
-#SIM_ARGS = "-t 1ps -debugdb"
+ifeq ($(SIM),questa)
+	PRE_SIM_ARGS = '-noautoldlibpath'
+	SIM_ARGS = "-t 1ps -do '../sim.do' -debugdb -noautoldlibpath"
+endif
 
 
 #PYTHONPATH := $(PWD)/../pydevd-pycharm.egg:$(PYTHONPATH)

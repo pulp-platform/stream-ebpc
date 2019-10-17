@@ -58,28 +58,7 @@ class EBPCDecoderScoreboard:
                 i += 1
         nz_data = zero_pad_list(nz_data, self.block_size)
         self.inputs['bpc'] = bpc.BPC_words(np.array(nz_data),self.block_size,variant='paper',word_w=self.data_w)
-        # ZRLE
-        bw_zrle = math.ceil(math.log2(self.max_zrle_len))
-        zero_run = 0
-        enc_znz_stream = ''
-        for el in znz_stream:
-            if el == 0:
-                if zero_run == self.max_zrle_len-1:
-                    enc_znz_stream += '0' + bin(self.max_zrle_len-1)[2:].zfill(bw_zrle)
-                    zero_run = 0
-                else:
-                    zero_run += 1
-            else:
-                if zero_run != 0:
-                    enc_znz_stream += ('0' + bin(zero_run-1)[2:].zfill(bw_zrle))
-                    zero_run = 0
-                enc_znz_stream += '1'
-        # catch any remaining zero run
-        if zero_run != 0:
-            enc_znz_stream += ('0' + bin(zero_run-1)[2:].zfill(bw_zrle))
-        # pad to wordwidth
-        enc_znz_stream = zero_pad_bitstr(enc_znz_stream, self.data_w)
-        self.inputs['znz'] = split_str(enc_znz_stream, self.data_w)
+        self.inputs['znz'] = bpc.ZRLE_words(data_decoded, max_burst_len=self.max_zrle_len, wordwidth=self.data_w)
         data_decoded_bin = valuesToBinary(np.array(data_decoded), wordwidth=self.data_w)
         self.outputs_exp += split_str(data_decoded_bin, self.data_w)
 

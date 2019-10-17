@@ -37,3 +37,7 @@ def get_random_nonzero_in_range(lo, hi):
     while choice == 0:
         choice = np.random.randint(lo, hi)
     return int(choice)
+
+def is_pwr_of_two(num):
+    return (num & (num-1) == 0) and num > 0
+
