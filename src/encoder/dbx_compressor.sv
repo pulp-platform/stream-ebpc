@@ -56,12 +56,12 @@ module dbx_compressor
       code_symb.zero        = 1'b1;
       code_symb.symb        = 'X;
       code_symb.len         = symb_len_t'('X);
+    end else if (&dbx_i == 1'b1) begin
+      code_symb.symb    = {ALL_ONES,{(MAX_SYMB_LEN-5){1'b0}}};
+      code_symb.len = FIVE;
     end else if (|dbp_i == 1'b0) begin
       code_symb.symb      = {DBXZ_DBPNZ, {(MAX_SYMB_LEN-5){1'b0}}};
       code_symb.len       = FIVE;
-    end else if (&dbx_i == 'b1) begin
-      code_symb.symb    = {ALL_ONES,{(MAX_SYMB_LEN-5){1'b0}}};
-      code_symb.len = FIVE;
     end else begin
       cnt          = 'd0;
       pos          = 'd0;

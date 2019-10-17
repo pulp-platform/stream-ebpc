@@ -61,7 +61,7 @@ module seq_coder
   end
 
   always_comb begin : fsm
-    automatic logic [$clog2(DATA_W)-1:0] zeros;
+    automatic logic [$clog2(DATA_W):0] zeros;
     automatic logic write_zero = 1'b0, stall = 1'b0;
     zeros                      = zero_cnt_q;
     state_d                    = state_q;
