@@ -29,7 +29,8 @@ module ebpc_encoder
 
 
   logic [DATA_W-1:0]         data_reg_d, data_reg_q;
-  logic                      flush_d, flush_q;
+  logic                      last_d, last_q;
+  logic                      flush;
   logic                      data_reg_en;
   logic [DATA_W-1:0]         data_to_bpc;
   logic                      vld_to_bpc, rdy_from_bpc;
@@ -40,7 +41,7 @@ module ebpc_encoder
   logic                      znz_idle;
 
 
-  typedef enum               {idle, running, running_killzero, wait_killzero,  wait_rdy, flush} state_t;
+  typedef enum               {idle, running, running_killzero, wait_killzero,  wait_rdy, flush_st} state_t;
   // 0: waiting for packer
   // 1: waiting for bpc
   logic                 wait_rdy_d, wait_rdy_q;
@@ -51,7 +52,7 @@ module ebpc_encoder
 
   initial assert(DATA_W >= MAX_SYMB_LEN) else $fatal("DATA_W must be larger or equal to MAX_SYMB_LEN!");
 
-  assign flush_d = last_i;
+  assign last_d = last_i;
   assign data_reg_d = data_i;
   
 
@@ -70,6 +71,7 @@ module ebpc_encoder
     data_reg_en    = 1'b0;
     rdy_o          = 1'b0;
     idle_o         = 1'b0;
+    flush = 1'b0;
 
     case (state_q)
       idle : begin
@@ -88,8 +90,8 @@ module ebpc_encoder
           vld_to_znz    = 1'b1;
           if (rdy_from_bpc && rdy_from_znz) begin
             incr_block_cnt = 1'b1;
-            if (flush_q)
-              state_d  = flush;
+            if (last_q)
+              state_d  = flush_st;
             else begin
               rdy_o = 1'b1;
               if (vld_i)
@@ -104,8 +106,8 @@ module ebpc_encoder
           end else begin // if (data_reg_q != '0 || (zero_cnt_q == MAX_ZERO_RUN-1 && data_reg_q == '0))
             vld_to_znz = 1'b1;
             if (rdy_from_znz) begin
-              if (flush_q)
-                state_d  = flush;
+              if (last_q)
+                state_d  = flush_st;
               else begin
                 rdy_o = 1'b1;
                 if (vld_i) begin
@@ -113,7 +115,7 @@ module ebpc_encoder
                 end else begin
                     state_d = idle;
                 end
-              end // else: !if(flush_q)
+              end // else: !if(last_q)
             end // if (rdy_from_znz)
           end // else: !if(data_reg_q != '0)
       end // case: running
@@ -131,8 +133,8 @@ module ebpc_encoder
         end
         if (rdy_to_wait_for) begin
           incr_block_cnt = 1'b1;
-          if (flush_q)
-            state_d = flush;
+          if (last_q)
+            state_d = flush_st;
           else begin
               rdy_o = 1'b1;
             if (vld_i) begin
@@ -143,13 +145,16 @@ module ebpc_encoder
           end
         end
       end // case: wait_rdy
-      flush : begin
+      flush_st : begin
         data_to_bpc = 'd0;
         if (block_cnt_q > 0) begin
           vld_to_bpc = 1'b1;
           if (rdy_from_bpc)
             incr_block_cnt = 1'b1;
-        end else
+        end else if (~bpc_idle)
+          // keep applying flush signal until BPC signals idle
+          flush = 1'b1;
+        else
           state_d = idle;
       end
     endcase // case (state_q)
@@ -163,14 +168,14 @@ module ebpc_encoder
   always @(posedge clk_i or negedge rst_ni) begin : sequential
     if (~rst_ni) begin
       data_reg_q  <= 'd0;
-      flush_q     <= 'd0;
+      last_q     <= 'd0;
       wait_rdy_q  <= 1'b0;
       state_q     <= idle;
       block_cnt_q <= 'd0;
     end else begin
       if (data_reg_en) begin
         data_reg_q  <= data_reg_d;
-        flush_q     <= flush_d;
+        last_q     <= last_d;
       end
       wait_rdy_q  <= wait_rdy_d;
       state_q     <= state_d;
@@ -184,7 +189,7 @@ module ebpc_encoder
                    .clk_i(clk_i),
                    .rst_ni(rst_ni),
                    .data_i(data_reg_q),
-                   .flush_i(flush_q),
+                   .flush_i(flush),
                    .vld_i(vld_to_bpc),
                    .rdy_o(rdy_from_bpc),
                    .data_o(bpc_data_o),
@@ -198,7 +203,7 @@ module ebpc_encoder
             .clk_i(clk_i),
             .rst_ni(rst_ni),
             .is_one_i(is_one_to_znz),
-            .flush_i(flush_q),
+            .flush_i(last_q),
             .vld_i(vld_to_znz),
             .rdy_o(rdy_from_znz),
             .data_o(znz_data_o),

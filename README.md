@@ -153,7 +153,7 @@ symbols are packed into words, so the encoded stream looks like this:
 
 Our testbenches are written in Python using
 [cocotb](https://github.com/cocotb/cocotb). There are testbenches
-supplied for 4 design entities in the `tb/coco_tests` folder:
+supplied for 4 design entities in the `tb` folder:
 
   - `bpc_encoder` - this block performs bit-plane encoding on the input
     stream
@@ -178,6 +178,29 @@ stderrToServer=True)` Follow the
 [guide](https://www.jetbrains.com/help/pycharm/remote-debugging-with-product.html)
 by JetBrains to set up remote debugging. You will need PyCharm
 Professional for this to work.
+
+### Feature Map Tests
+
+The EBPC encoder testbench contains a (commented-out) test
+(`fmap_inputs`) which can be used to automatically generate intermediate
+feature maps of a variety of networks, as defined in the `data.getModel`
+function and feed them to the compressor hardware. The python code uses
+the popular [PyTorch](https://pytorch.org/) library. In order for it to
+work with QuestaSim and CocoTB, you will have to use [my CocoTB
+fork](https://github.com/da-gazzi/cocotb), which allows to pass the
+`-noautoldlibpath` argument to QuestaSim in the makefile using the
+`PRE_SIM_ARGS` make variable - otherwise, Questa will prepend the
+included GCC distributions to the `LD_LIBRARY_PATH`, which are too old
+to support PyTorch. To run the tests, you will have to download a
+dataset of your choice (e.g. the ImageNet validation set). The code uses
+the TorchVision `ImageFolder` data loader, which expects the images to
+be located in folders corresponding to their labels. Thus,
+`IMAGE_LOCATION` in `ebpc_encoder_tests.py` needs to be set to the
+parent folder containing only a subfolder which in turn contains the
+images. Note that even just a single images produces massive amounts of
+stimuli data, so only a fraction of the feature maps are actually fed to
+the hardware (the fraction can be changed with the `FMAP_FRAC`
+variable).
 
 ## Contact
 

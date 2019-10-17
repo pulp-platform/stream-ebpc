@@ -37,8 +37,6 @@ module buffer
 
   always_comb begin : dbp_block_assign
     dbp_block_to_fifo.base = base_q;
-    // flush signal not used
-    dbp_block_to_fifo.flush = 1'b0;
     for (int i=0; i<DATA_W+1; i++)
       dbp_block_to_fifo.dbp[i] = shift_reg_q[i];
   end

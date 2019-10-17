@@ -23,6 +23,7 @@ module dbp_dbx_enc
    output dbp_block_t              dbp_block_o,
    output logic                    vld_o,
    input logic                     rdy_i,
+   output logic                    flush_o,
    output logic                    idle_o
 );
 
@@ -34,8 +35,7 @@ module dbp_dbx_enc
   state_t                          state_d, state_q;
   logic [$clog2(BLOCK_SIZE)-1:0]   fill_cnt_d, fill_cnt_q;
   logic                            shift;
-  logic [0:DATA_W] [BLOCK_SIZE-2:0] dbp, dbx;
-  logic                             flush_d, flush_q;
+  logic [0:DATA_W] [BLOCK_SIZE-2:0] dbp;
 
   always_comb begin : dbp_assignment
     for (int i=0; i<BLOCK_SIZE-1; i++) begin
@@ -47,7 +47,6 @@ module dbp_dbx_enc
   end
 
   assign dbp_block_o.dbp = dbp;
-  assign dbp_block_o.flush = flush_q;
   assign dbp_block_o.base = diffs_q[BLOCK_SIZE-1][DATA_W-1:0];
 
   always_comb begin : fsm
@@ -58,20 +57,21 @@ module dbp_dbx_enc
     vld_o       = 1'b0;
     last_item_d = last_item_q;
     shift       = 1'b0;
-    flush_d     = flush_q;
+    flush_o     = 1'b0;
     idle_o      = 1'b0;
 
-    case (state_d)
+    case (state_q)
       idle: begin
         assert (fill_cnt_q==BLOCK_SIZE-1) else $display("Assertion fail @ time %t: fill_cnt_q is not BLOCK_SIZE-1 in idle state!", $time);
         fill_cnt_d  = BLOCK_SIZE-1;
         rdy_o       = 1'b1;
         last_item_d = 'd0;
-        idle_o = 1'b1;
+        idle_o      = 1'b1;
+        flush_o = flush_i;
         if (vld_i) begin
           idle_o      = 1'b0;
           last_item_d = data_i;
-          flush_d     = flush_i;
+          flush_o     = 1'b0;
           shift       = 1'b1;
           state_d     = fill;
           fill_cnt_d  = fill_cnt_q-1;
@@ -81,8 +81,6 @@ module dbp_dbx_enc
         rdy_o = 1'b1;
         if (vld_i) begin
           shift          = 1'b1;
-          flush_d        = flush_i | flush_q; // any element for which flush is high results in a flush for
-                                // current block
           last_item_d    = data_i;
           fill_cnt_d     = fill_cnt_q-1;
           if (fill_cnt_q == 0) begin
@@ -100,11 +98,8 @@ module dbp_dbx_enc
             last_item_d = data_i;
             fill_cnt_d  = fill_cnt_q-1;
             state_d     = fill;
-            flush_d = flush_i;
-          end else begin
+          end else
             state_d = idle;
-            flush_d = 1'b0;
-          end
         end
       end // case: wait_out
       default:
@@ -125,7 +120,6 @@ module dbp_dbx_enc
       state_q      <= idle;
       fill_cnt_q   <= BLOCK_SIZE-1;
       last_item_q  <= 'd0;
-      flush_q      <= 1'b0;;
     end else begin
       for (int i=0; i<BLOCK_SIZE; i++)
         if (shift)
@@ -133,7 +127,6 @@ module dbp_dbx_enc
       state_q         <= state_d;
       fill_cnt_q      <= fill_cnt_d;
       last_item_q     <= last_item_d;
-      flush_q <= flush_d;
     end
   end // block: sequential
 

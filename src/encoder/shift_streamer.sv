@@ -60,10 +60,6 @@ always_comb begin : fsm
           st_d = filling;
           shift_cnt_d = shift_cnt_q + shift_i;
         end
-        if (flush_i) begin
-          st_d        = flush;
-          shift_cnt_d = shift_cnt_q + shift_i;
-        end
       end
     end // case: empty
     filling: begin
@@ -71,14 +67,13 @@ always_comb begin : fsm
       if (vld_i) begin
         stream_reg_d = stream_reg_q |  (data_i>>shift_cnt_q);
         shift_cnt_d  = shift_cnt_q + shift_i;
-        if (flush_i)
-          st_d = flush;
-        else //if (shift_cnt_d[$clog2(DATA_W)]) begin//
-           if (shift_cnt_d >= DATA_W) begin
-             shift_cnt_d = shift_cnt_d - DATA_W;
-             st_d        = full;
+        if (shift_cnt_d >= DATA_W) begin
+          shift_cnt_d = shift_cnt_d - DATA_W;
+          st_d        = full;
         end
-      end
+      end // if (vld_i)
+      if (flush_i)
+        st_d = flush;
     end // case: filling
     full: begin
       vld_o = 1'b1;
@@ -87,24 +82,21 @@ always_comb begin : fsm
         if (vld_i) begin
           shift_cnt_d    = shift_cnt_q + shift_i;
           stream_reg_d = {stream_reg_q[DATA_W-1:0], {DATA_W{1'b0}}} | (data_i>>shift_cnt_q);
-          if (flush_i)
-            st_d = flush;
-          else begin
-            if (shift_cnt_d >= DATA_W)
-              shift_cnt_d = shift_cnt_d - DATA_W;
-            else
-              st_d = filling;
-          end
+          if (shift_cnt_d >= DATA_W)
+            shift_cnt_d = shift_cnt_d - DATA_W;
+          else
+            st_d = filling;
         end else begin // if (vld_i)
           stream_reg_d      = {stream_reg_q[DATA_W-1:0], {DATA_W{1'b0}}};
             if (shift_cnt_q == 'd0)
               st_d = empty;
             else
               st_d   = filling;
-      end // else: !if(vld_i)
+          end // else: !if(vld_i)
       end // if (rdy_i)
     end // case: full
     flush: begin
+      assert(shift_cnt_q >0) else $display("Assertion failed in shift_streamer @ time %t - shift_cnt is 0 in flush state!", $time);
       vld_o = 1'b1;
       if (rdy_i) begin
         stream_reg_d = {stream_reg_q[DATA_W-1:0], {DATA_W{1'b0}}};

@@ -31,6 +31,7 @@ module bpc_encoder
   logic                      rdy_coder_to_enc;
   logic                      dbp_dbx_idle;
   logic                      seq_coder_idle;
+  logic                      flush_dbp_dbx_to_coder;
 
   assign idle_o = seq_coder_idle && dbp_dbx_idle;
 
@@ -42,6 +43,7 @@ module bpc_encoder
                .flush_i(flush_i),
                .vld_i(vld_i),
                .rdy_o(rdy_o),
+               .flush_o(flush_dbp_dbx_to_coder),
                .dbp_block_o(dbp_enc_to_coder),
                .vld_o(vld_enc_to_coder),
                .rdy_i(rdy_coder_to_enc),
@@ -54,6 +56,7 @@ module bpc_encoder
        .clk_i(clk_i),
        .rst_ni(rst_ni),
        .dbp_block_i(dbp_enc_to_coder),
+       .flush_i(flush_dbp_dbx_to_coder),
        .vld_i(vld_enc_to_coder),
        .rdy_o(rdy_coder_to_enc),
        .data_o(data_o),

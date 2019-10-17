@@ -16,6 +16,7 @@ module seq_coder
    input logic               clk_i,
    input logic               rst_ni,
    input dbp_block_t         dbp_block_i,
+   input logic               flush_i,
    input logic               vld_i,
    output logic              rdy_o,
    // data out interface
@@ -83,8 +84,10 @@ module seq_coder
         zero_cnt_d = 'd0;
         dbx_cnt_d  = DATA_W;
         idle_o     = streamer_idle;
+        flush = flush_i;
         if (vld_from_slice) begin
           idle_o    = 1'b0;
+          flush = 1'b0;
           shift     = DATA_W;
           data      = dbp_block_from_fifo.base;
           shift_vld = 1'b1;
@@ -133,8 +136,6 @@ module seq_coder
             if (dbx_cnt_q != 'd0) begin
               dbx_cnt_d = dbx_cnt_q-1;
             end else begin
-              if (dbp_block_from_fifo.flush)
-                flush      = 1'b1;
               rdy_to_slice = 1'b1;
               state_d      = idle;
               dbx_cnt_d    = DATA_W;

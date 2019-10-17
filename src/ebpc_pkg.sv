@@ -40,7 +40,6 @@ package ebpc_pkg;
   typedef struct packed {
     logic [0:DATA_W] [BLOCK_SIZE-2:0] dbp;
     logic [DATA_W-1:0]                base;
-    logic                             flush;
   } dbp_block_t;
 
   typedef struct packed {
