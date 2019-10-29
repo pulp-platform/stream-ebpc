@@ -8,6 +8,8 @@ import torchvision as tv
 import numpy as np
 import random
 import math
+import common.bpc as bpc
+from common.util import zero_pad_list, write_sim_file, split_str
 
 
 import os
@@ -74,7 +76,7 @@ def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=
       outputs = []
       def hook(module, input, output):
           outputs.append(filter_fmaps(output.detach().contiguous().clone(), frac))
-      for i, m in enumerate(modules):
+      for m in modules:
         m.register_forward_hook(hook)
       return outputs
 
@@ -91,6 +93,41 @@ def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=
       model.eval()
       outp = model(image)
 
-    
-
     return outputsReLU
+
+
+
+def getFMStimuli(model, dataset_path, data_w, num_batches, batch_size, signed=True, fmap_frac=0.01):
+    assert data_w in [8, 16, 32]
+    model, device = getModel(model)
+    fms = getFMs(model, numBatches=num_batches, batchSize=batch_size, datasetPath=dataset_path, device=device, frac=fmap_frac)
+    fms_flat = torch.tensor([])
+    for fm in fms:
+        fms_flat = torch.cat([fms_flat, fm.to(torch.device('cpu')).view(-1)])
+
+    fms_q, _, dtype = bpc.quantize(fms_flat, 'fixed{}'.format(data_w))
+    fms_q = fms_q.numpy().astype(dtype).tolist()
+    return fms_q
+
+def genFMStimFiles(file_prefixes, data_w, *args, modules=['encoder', 'decoder'], max_zrle_len=16, block_size=8, debug_file=None, num_words_w=24, **kwargs):
+    fms_q = getFMStimuli(*args, data_w=data_w, **kwargs)
+    fms_q = np.array(fms_q)
+    fms_bin = bpc.valuesToBinary(fms_q, data_w)
+    fms_bin = split_str(fms_bin, data_w)
+    last_bin = ['0']*(len(fms_q)-1) + ['1']
+    nz_data = [el for el in fms_q if el != 0]
+    nz_data = zero_pad_list(nz_data, block_size)
+    bpc_vals = bpc.BPC_words(np.array(nz_data), block_size=block_size, variant='paper', word_w=8, dbg_fn=debug_file)
+    znz_vals = bpc.ZRLE_words(fms_q, max_burst_len=max_zrle_len, wordwidth=data_w)
+    nw_bin = bpc.valuesToBinary(np.array([len(fms_q)-1]), num_words_w)
+
+    if 'encoder' in modules:
+        write_sim_file(data=zip(fms_bin, last_bin), filename=file_prefixes['encoder']+'_input.stim', length=len(fms_bin))
+        write_sim_file(zip(bpc_vals), file_prefixes['encoder']+'_bpc.expresp', len(bpc_vals))
+        write_sim_file(zip(znz_vals), file_prefixes['encoder']+'_znz.expresp', len(znz_vals))
+    if 'decoder' in modules:
+        write_sim_file(data=zip([nw_bin]), filename=file_prefixes['decoder']+'_num_words_input.stim', length=1)
+        write_sim_file(zip(bpc_vals), file_prefixes['decoder']+'_bpc_input.stim', len(bpc_vals))
+        write_sim_file(zip(znz_vals), file_prefixes['decoder']+'_znz_input.stim', len(znz_vals))
+        write_sim_file(zip(fms_bin, last_bin), file_prefixes['decoder']+'_data_output.expresp', len(fms_q))
+

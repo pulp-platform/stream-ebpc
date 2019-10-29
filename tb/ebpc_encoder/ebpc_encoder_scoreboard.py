@@ -69,15 +69,7 @@ class EBPCEncoderScoreboard:
 
     def gen_fmap_stimuli(self, model, dataset_path, num_batches, batch_size, signed=True, fmap_frac=0.01):
         assert self.data_w in [8, 16, 32]
-        model, device = data.getModel(model)
-        fms = data.getFMs(model, numBatches=num_batches, batchSize=batch_size, datasetPath=dataset_path, device=device, frac=fmap_frac)
-        fms_flat = torch.tensor([])
-        for fm in fms:
-            fms_flat = torch.cat([fms_flat, fm.to(torch.device('cpu')).view(-1)])
-
-        fms_q, _, dtype = bpc.quantize(fms_flat, 'fixed{}'.format(self.data_w))
-        fms_q = fms_q.numpy().astype(dtype).tolist()
-        fms_q = zero_pad_list(fms_q, self.block_size)
+        fms_q = data.getFMStimuli(model=model, dataset_path=dataset_path, data_w=self.data_w, num_batches=num_batches, batch_size=batch_size, signed=signed, fmap_frac=fmap_frac)
         nz_data = [el for el in fms_q if el != 0]
         nz_data = zero_pad_list(nz_data, self.block_size)
         znz_stream = [0 if el==0 else 1 for el in fms_q]

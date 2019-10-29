@@ -41,3 +41,13 @@ def get_random_nonzero_in_range(lo, hi):
 def is_pwr_of_two(num):
     return (num & (num-1) == 0) and num > 0
 
+def write_sim_file(data, filename, length):
+    with open(filename, 'w') as fh:
+        for idx, line in enumerate(data):
+            str = ''
+            for val in line:
+                str += (val + ' ')
+            str = str[:-1]
+            if (idx != length-1):
+                str += '\n'
+            fh.write(str)

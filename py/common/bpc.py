@@ -47,6 +47,7 @@ def deltaCompr(values):
 def deltaBP(values, wordwidth=None):
   base, diffs = deltaCompr(values)
   binDiffs = [valuesToBinary(v, wordwidth=wordwidth+1) for v in diffs]
+  base, diffs = deltaCompr(values)
   DBPs = [''.join(dbp) for dbp in zip(*binDiffs)]
   return valuesToBinary(base, wordwidth=wordwidth), DBPs
 
@@ -268,7 +269,7 @@ def BPC(values, chunkSize=32, variant='baseline', wordwidth=None, dbg_fn=None):
   else:
     dbg_fh = None
   k = 1
-  for w in blocks(values, chunkSize):
+  for idx, w in enumerate(blocks(values, chunkSize)):
     if dbg_fh is not None:
       dbg_fh.write("Block {}:\n".format(k))
     strm += BPC_block(w, variant=variant, wordwidth=wordwidth, prevValue=prevBlock[0], dbg_fh=dbg_fh)
