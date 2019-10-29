@@ -31,6 +31,7 @@ module buffer
   // dbps are shifted in from [DATA_W] to [0]
   logic [BLOCK_SIZE-2:0] shift_reg_d [DATA_W:0], shift_reg_q [DATA_W:0];
   logic                        vld_to_slice, rdy_from_slice;
+  logic                        rdy_to_slice;
 
   dbp_block_t                  dbp_block_to_fifo;
 
@@ -45,8 +46,9 @@ module buffer
     rdy_o        = 1'b0;
     shift_reg_d  = shift_reg_q;
     vld_to_slice = 1'b0;
+    rdy_to_slice = rdy_i;
     state_d      = state_q;
-    base_d = base_q;
+    base_d       = base_q;
 
     case (state_q)
       wait_base : begin
@@ -88,6 +90,8 @@ module buffer
         shift_reg_d[i] = 'd0;
       base_d           = 'd0;
       state_d          = wait_base;
+      // clear FIFO slice if it contains anything
+      rdy_to_slice     = 1'b1;
     end
   end
 
@@ -113,7 +117,7 @@ module buffer
              .rdy_o(rdy_from_slice),
              .dout_o(data_o),
              .vld_o(vld_o),
-             .rdy_i(rdy_i)
+             .rdy_i(rdy_to_slice)
              );
 
 endmodule // buffer

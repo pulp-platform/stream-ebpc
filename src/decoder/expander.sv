@@ -13,7 +13,7 @@ module expander
   import ebpc_pkg::*;
   (
    input logic [DATA_W-1:0]      data_i,
-   output logic [LOG_DATA_W-1:0] zeros_o,
+   output logic [LOG_DATA_W:0] zeros_o,
    output symb_len_t             len_o,
    output logic [BLOCK_SIZE-2:0] dbx_dbp_o,
    output logic                  is_dbp_o

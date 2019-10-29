@@ -32,7 +32,7 @@ module symbol_decoder
 
   logic [BLOCK_SIZE-2:0]                expander_out;
   logic                                 expander_is_dbp;
-  logic [LOG_DATA_W-1:0]                expander_zeros;
+  logic [LOG_DATA_W:0]                expander_zeros;
   symb_len_t                            expander_len;
 
   logic [BLOCK_SIZE-2:0]                dbp_reg_d, dbp_reg_q;
