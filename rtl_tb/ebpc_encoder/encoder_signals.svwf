@@ -1,0 +1,169 @@
+
+array unset createdGroup
+array set createdGroup {}
+#
+# Groups
+#
+if {[catch {group get -using [list DUT]}]} {
+set createdGroup([list DUT]) 1
+catch {group new -name DUT -overlay 0}
+}
+if {[catch {group get -using [list BPC Encoder]}]} {
+set createdGroup([list BPC Encoder]) 1
+catch {group new -name {BPC Encoder} -overlay 0}
+}
+if {[catch {group get -using [list DBP DBX Encoder]}]} {
+set createdGroup([list DBP DBX Encoder]) 1
+catch {group new -name {DBP DBX Encoder} -overlay 0}
+}
+if {[catch {group get -using [list Seq_Coder]}]} {
+set createdGroup([list Seq_Coder]) 1
+catch {group new -name Seq_Coder -overlay 0}
+}
+if {[info exists createdGroup([list DUT])]} {
+group using DUT
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {ebpc_encoder_tb.dut_i.data_i[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.last_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.vld_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.rdy_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_data_o[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_vld_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_rdy_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.znz_data_o[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.znz_vld_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.znz_rdy_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.idle_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.block_cnt_d[2:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.block_cnt_q[2:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_idle}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.data_reg_d[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.data_reg_en}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.data_reg_q[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.data_to_bpc[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.flush}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.is_one_to_znz}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.last_d}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.last_q}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.rdy_from_bpc}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.rdy_from_znz}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.state_d}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.state_q}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.vld_to_bpc}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.vld_to_znz}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.wait_rdy_d}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.wait_rdy_q}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.znz_idle}]} ]
+}
+
+if {[info exists createdGroup([list BPC Encoder])]} {
+group using {BPC Encoder}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.data_i[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.vld_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.rdy_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.data_o[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.vld_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.rdy_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.flush_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.idle_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.vld_enc_to_coder}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_idle}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.rdy_coder_to_enc}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.flush_dbp_dbx_to_coder}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_enc_to_coder}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_idle}]} ]
+}
+
+if {[info exists createdGroup([list DBP DBX Encoder])]} {
+group using {DBP DBX Encoder}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.data_i[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.vld_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.rdy_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.dbp_block_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.vld_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.rdy_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.flush_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.flush_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.idle_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.dbp[0:8]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.diffs_d[0:7]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.diffs_q[0:7]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.fill_cnt_d[2:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.fill_cnt_q[2:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.last_item_d[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.last_item_q[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.shift}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.state_d}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.dbp_dbx_i.state_q}]} ]
+}
+
+if {[info exists createdGroup([list Seq_Coder])]} {
+group using Seq_Coder
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.dbp_block_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.vld_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.rdy_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.data_o[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.vld_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.rdy_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.flush_i}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.idle_o}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.code_symb}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.data[7:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.dbp_block_from_fifo}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.dbx_cnt_d[3:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.dbx_cnt_q[3:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.flush}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.last_was_zero_d}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.last_was_zero_q}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.rdy_to_slice}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.shift[3:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.shift_rdy}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.shift_vld}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.state_d}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.state_q}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.state_t}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.streamer_idle}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.vld_from_slice}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.zero_cnt_d[3:0]}]} ] \
+    [subst  {[format {ebpc_encoder_tb.dut_i.bpc_encoder_i.seq_coder_i.zero_cnt_q[3:0]}]} ]
+}
+
+set id [waveform add -signals [subst  {
+	{[format {ebpc_encoder_tb.dut_i.clk_i}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {ebpc_encoder_tb.dut_i.rst_ni}]}
+	} ]]
+
+set groupId0 [waveform add -groups DUT]
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups {{BPC Encoder}}]
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups {{DBP DBX Encoder}}]
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups Seq_Coder]
+waveform hierarchy collapse $groupId0
+
+
+waveform xview limits 0 2000ns

@@ -1,0 +1,213 @@
+
+#
+# Mnemonic Maps
+#
+mmap new  -reuse -name {Boolean as Logic} -radix %b -contents {{%c=FALSE -edgepriority 1 -shape low}
+{%c=TRUE -edgepriority 1 -shape high}}
+mmap new  -reuse -name {Example Map} -radix %x -contents {{%b=11???? -bgcolor orange -label REG:%x -linecolor yellow -shape bus}
+{%x=1F -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=2C -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=* -label %x -linecolor gray -shape bus}}
+
+array unset createdGroup
+array set createdGroup {}
+#
+# Groups
+#
+if {[catch {group get -using [list DUT]}]} {
+set createdGroup([list DUT]) 1
+catch {group new -name DUT -overlay 0}
+}
+if {[catch {group get -using [list Buffer]}]} {
+set createdGroup([list Buffer]) 1
+catch {group new -name Buffer -overlay 0}
+}
+if {[catch {group get -using [list Symbol Decoder]}]} {
+set createdGroup([list Symbol Decoder]) 1
+catch {group new -name {Symbol Decoder} -overlay 0}
+}
+if {[catch {group get -using [list Group 4]}]} {
+set createdGroup([list Group 4]) 1
+catch {group new -name {Group 4} -overlay 0}
+}
+if {[catch {group get -using [list Delta Reverse]}]} {
+set createdGroup([list Delta Reverse]) 1
+catch {group new -name {Delta Reverse} -overlay 0}
+}
+if {[catch {group get -using [list Unpacker]}]} {
+set createdGroup([list Unpacker]) 1
+catch {group new -name Unpacker -overlay 0}
+}
+if {[info exists createdGroup([list DUT])]} {
+group using DUT
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {ebpc_decoder_tb.dut_i.num_words_i[23:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.num_words_vld_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.num_words_rdy_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpc_i[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpc_vld_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpc_rdy_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.znz_i[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.znz_vld_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.znz_rdy_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.data_o[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.last_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.vld_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.rdy_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.znz}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.word_cnt_q[23:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.word_cnt_d[23:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.vld_to_zrld}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.vld_from_zrld}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.vld_from_bpc}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.state_q}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.state_d}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.rdy_to_zrld}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.rdy_to_bpc}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.rdy_from_zrld}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.flush_to_zrld}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.data_from_bpc[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.clr_to_bpc}]} ]
+}
+
+if {[info exists createdGroup([list Buffer])]} {
+group using Buffer
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.data_i[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.vld_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.push_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.rdy_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.data_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.vld_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.rdy_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.clr_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.base_d[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.base_q[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.dbp_block_to_fifo}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.rdy_from_slice}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.rdy_to_slice}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.shift_reg_d[8:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.shift_reg_q[8:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.state_d}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.state_q}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.buffer_i.vld_to_slice}]} ]
+}
+
+if {[info exists createdGroup([list Symbol Decoder])]} {
+group using {Symbol Decoder}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.clr_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.data_i[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.unpacker_fill_state_i[3:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.len_o[3:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.data_vld_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.data_rdy_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.data_o[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.push_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.vld_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.rdy_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.dbp_reg_d[6:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.dbp_reg_q[6:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.dbx_cnt_d[3:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.dbx_cnt_q[3:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.expander_is_dbp}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.expander_len}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.expander_out[6:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.expander_zeros[3:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.state_d}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.state_q}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.zero_cnt_d[2:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.decoder_i.zero_cnt_q[2:0]}]} ]
+}
+
+if {[info exists createdGroup([list Group 4])]} {
+group using {Group 4}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+
+}
+
+if {[info exists createdGroup([list Delta Reverse])]} {
+group using {Delta Reverse}
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.data_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.vld_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.rdy_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.data_o[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.vld_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.rdy_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.clr_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.acc_reg_d[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.acc_reg_q[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.diff_idx_d[2:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.diff_idx_q[2:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.diffs[0:6]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.state_d}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.dr_i.state_q}]} ]
+}
+
+if {[info exists createdGroup([list Unpacker])]} {
+group using Unpacker
+group set -overlay 0
+group set -comment {}
+group clear 0 end
+group insert \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.data_i[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.vld_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.rdy_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.data_o[7:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.fill_state_o[3:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.len_i[3:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.vld_o}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.rdy_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.clr_i}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.fill_state_d[3:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.fill_state_q[3:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.state_d}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.state_q}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.state_t}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.stream_reg_d[15:0]}]} ] \
+    [subst  {[format {ebpc_decoder_tb.dut_i.bpcd_i.unpacker_i.stream_reg_q[15:0]}]} ]
+}
+
+set id [waveform add -signals [subst  {
+	{[format {ebpc_decoder_tb.dut_i.clk_i}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {ebpc_decoder_tb.dut_i.rst_ni}]}
+	} ]]
+
+set groupId0 [waveform add -groups DUT]
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups Unpacker]
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups {{Symbol Decoder}}]
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups Buffer]
+waveform hierarchy collapse $groupId0
+
+
+set groupId0 [waveform add -groups {{Delta Reverse}}]
+waveform hierarchy collapse $groupId0
+
+
+waveform xview limits 0 2000000ps

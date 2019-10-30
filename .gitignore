@@ -21,3 +21,5 @@
 **/*.bak
 **/*.stim
 **/*.expresp
+**/*.rpt
+**/*.vstf
