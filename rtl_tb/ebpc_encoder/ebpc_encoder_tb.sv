@@ -23,8 +23,8 @@ module ebpc_encoder_tb;
 
   localparam time         CLK_PERIOD = 1.4ns;
   localparam time         RST_TIME = 10*CLK_PERIOD;
-  localparam time         TA = 0.05*CLK_PERIOD;
-  localparam time         TT = 0.95*CLK_PERIOD;
+  localparam time         TA = 0.15*CLK_PERIOD;
+  localparam time         TT = 0.85*CLK_PERIOD;
 
   logic                   clk;
   logic                   rst_n;
