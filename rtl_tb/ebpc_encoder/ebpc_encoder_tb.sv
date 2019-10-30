@@ -70,8 +70,11 @@ module ebpc_encoder_tb;
    bpc_if.last = 1'b0;
    znz_if.last = 1'b0;
    in_drv      = new(in_if);
-   bpc_drv     = new(bpc_if);
-   znz_drv     = new(znz_if);
+   in_drv.reset_out();
+   bpc_drv = new(bpc_if);
+   bpc_drv.reset_in();
+   znz_drv = new(znz_if);
+   znz_drv.reset_in();
    #(2*RST_TIME);
    fork
      in_drv.feed_inputs(INPUT_STIM_FILE);
