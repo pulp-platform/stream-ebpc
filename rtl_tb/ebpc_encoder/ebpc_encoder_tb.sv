@@ -9,8 +9,8 @@
 // specific language governing permissions and limitations under the License.
 module ebpc_encoder_tb;
   import hs_drv_pkg::*;
-  
-  localparam int unsigned DATA_W = 8;
+  import ebpc_pkg::*;
+
   localparam int unsigned MIN_IN_WAIT_CYCLES = 0;
   localparam int unsigned MAX_IN_WAIT_CYCLES = 3;
   localparam int unsigned MIN_OUT_WAIT_CYCLES = 0;

@@ -10,9 +10,10 @@
 
 
 module ebpc_decoder_tb;
-  import ebpc_pkg::*;
   import hs_drv_pkg::*;
+  import ebpc_pkg::*;
   
+  localparam int unsigned DATA_W = 8;
   localparam int unsigned MIN_IN_WAIT_CYCLES = 0;
   localparam int unsigned MAX_IN_WAIT_CYCLES = 3;
   localparam int unsigned MIN_OUT_WAIT_CYCLES = 0;
