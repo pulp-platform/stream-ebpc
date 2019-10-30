@@ -100,9 +100,13 @@ module ebpc_decoder_tb;
 
   initial begin
     num_words_drv = new(num_words_if);
-    bpc_drv       = new(bpc_if);
-    znz_drv       = new(znz_if);
-    out_drv       = new(data_out_if);
+    num_words_drv.reset_out();
+    bpc_drv = new(bpc_if);
+    bpc_drv.reset_out();
+    znz_drv = new(znz_if);
+    znz_drv.reset_out();
+    out_drv = new(data_out_if);
+    out_drv.reset_in();
     #(RST_TIME*2);
     fork
       num_words_drv.feed_inputs(NUM_WORDS_STIM_FILE);

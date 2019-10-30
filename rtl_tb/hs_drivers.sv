@@ -93,6 +93,17 @@ class HandshakeDrv
     vif.rdy <= #TA 1'b0;
   endtask // read_output
 
+  task automatic reset_out();
+    vif.vld  <= 1'b0;
+    vif.data <= 'd0;
+    vif.last <= 1'b0;
+  endtask // reset_out
+  
+  task automatic reset_in();
+    vif.rdy <= 1'b0;
+  endtask // reset_in
+  
+
 endclass // HandshakeWrDrv
 
 endpackage
