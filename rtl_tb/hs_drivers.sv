@@ -1,3 +1,5 @@
+`timescale 1ps/1fs
+
 package hs_drv_pkg;
 
 class HandshakeDrv

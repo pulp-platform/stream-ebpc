@@ -1,3 +1,4 @@
+`timescale 1ps/1fs
 module rst_clk_drv
   #(
     parameter time CLK_PERIOD = 10ns,

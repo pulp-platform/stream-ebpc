@@ -24,9 +24,9 @@ LOG_MAX_WORDS = 24
 MAX_ZRLE_LEN = 16
 BLOCK_SIZE = 8
 #Adjust these to your needs - it's recommended to use absolute paths.
-BASE_STIM_DIRECTORY = '/home/georgr/projects/stream-ebpc/simvectors'
+BASE_STIM_DIRECTORY = '/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors'
 DATASET_PATH = '/scratch2/georgr/imagenet/imgs'
-DEBUG_FILE = '/home/georgr/projects/stream-ebpc/simvectors/dbg.rpt'
+DEBUG_FILE = None
 
 MODULES = ['encoder', 'decoder']
 NETS = ['vgg16', 'resnet34', 'mobilenet2']

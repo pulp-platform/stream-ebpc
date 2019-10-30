@@ -7,6 +7,7 @@
 // this License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
+`timescale 1ps/1fs
 module ebpc_encoder_tb;
   import hs_drv_pkg::*;
   
@@ -16,14 +17,14 @@ module ebpc_encoder_tb;
   localparam int unsigned MIN_OUT_WAIT_CYCLES = 0;
   localparam int unsigned MAX_OUT_WAIT_CYCLES = 3;
 
-  localparam string       INPUT_STIM_FILE = "../../simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_input.stim";
-  localparam string       BPC_EXPVAL_FILE = "../../simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_bpc.expresp";
-  localparam string       ZNZ_EXPVAL_FILE = "../../simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_znz.expresp";
+  localparam string       INPUT_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_input.stim";
+  localparam string       BPC_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_bpc.expresp";
+  localparam string       ZNZ_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_znz.expresp";
 
-  localparam time         CLK_PERIOD = 2.5ns;
-  localparam time         RST_TIME = 10.27*CLK_PERIOD;
-  localparam time         TA = 0.2*CLK_PERIOD;
-  localparam time         TT = 0.8*CLK_PERIOD;
+  localparam time         CLK_PERIOD = 1.4ns;
+  localparam time         RST_TIME = 10*CLK_PERIOD;
+  localparam time         TA = 0.05*CLK_PERIOD;
+  localparam time         TT = 0.95*CLK_PERIOD;
 
   logic                   clk;
   logic                   rst_n;
@@ -70,8 +71,11 @@ module ebpc_encoder_tb;
    bpc_if.last = 1'b0;
    znz_if.last = 1'b0;
    in_drv      = new(in_if);
-   bpc_drv     = new(bpc_if);
-   znz_drv     = new(znz_if);
+   in_drv.reset_out();
+   bpc_drv = new(bpc_if);
+   bpc_drv.reset_in();
+   znz_drv = new(znz_if);
+   znz_drv.reset_in();
    #(2*RST_TIME);
    fork
      in_drv.feed_inputs(INPUT_STIM_FILE);
