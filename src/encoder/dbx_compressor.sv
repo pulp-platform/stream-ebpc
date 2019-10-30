@@ -54,7 +54,7 @@ module dbx_compressor
     if (|dbx_i == 1'b0) begin
       //if zero, we don't need to specify anything except that it's zero - ZRLE is handled outside
       code_symb.zero        = 1'b1;
-      code_symb.symb        = 'X;
+      code_symb.symb        = 'd0;//'X;
       code_symb.len         = symb_len_t'('X);
     end else if (&dbx_i == 1'b1) begin
       code_symb.symb    = {ALL_ONES,{(MAX_SYMB_LEN-5){1'b0}}};
