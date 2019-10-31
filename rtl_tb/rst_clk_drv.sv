@@ -10,7 +10,7 @@ module rst_clk_drv
    );
 
   initial begin
-    clk_o  = 1'b0;
+    clk_o  = 1'b1;
     rst_no = 1'b0;
     #RST_TIME rst_no = 1'b1;
   end
