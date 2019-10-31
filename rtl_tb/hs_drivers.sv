@@ -21,7 +21,7 @@ class HandshakeDrv
     automatic logic [DATA_W-1:0] dat;
     automatic int fh;
     automatic logic last;
-    automatic logic [8:0] testchar;
+    automatic logic signed [8:0] testchar;
     fh       = $fopen(file, "r");
     if (fh == 0) begin
       $display("fh: %d", fh);
@@ -29,7 +29,7 @@ class HandshakeDrv
       return;
     end
     testchar = $fgetc(fh);
-    if (testchar < 0) begin
+    if (testchar < 1) begin
       $info("File %s is empty - aborting feed_inputs task.", file);
       return;
     end else
@@ -52,7 +52,7 @@ class HandshakeDrv
     automatic logic [DATA_W-1:0] dat_expected, dat_actual;
     automatic int fh;
     automatic logic last_expected, last_actual;
-    automatic logic [8:0] testchar;
+    automatic logic signed [8:0] testchar;
     fh       = $fopen(file, "r");
     if (fh == 0) begin
       $display("fh: %d", fh);
