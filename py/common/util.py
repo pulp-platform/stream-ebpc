@@ -30,7 +30,7 @@ def int_list_to_binval_list(intlist, n_bits, signed):
     return [BinaryValue(value=val, n_bits=n_bits, binaryRepresentation=binrep, bigEndian=False) for val in intlist]
 
 def random_vals(n, data_w):
-    vals = [random.randint(-2**(data_w-1), 2**(data_w-1)-1) for k in range(n)]
+    vals = [random.randint(-2**(data_w-1), 2**(data_w-1)) for k in range(n)]
     return vals
 def get_random_nonzero_in_range(lo, hi):
     choice = 0

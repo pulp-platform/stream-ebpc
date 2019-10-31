@@ -97,20 +97,26 @@ def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=
 
 
 
-def getFMStimuli(model, dataset_path, data_w, num_batches, batch_size, signed=True, fmap_frac=0.01):
+def getStimuli(model, dataset_path, data_w, num_batches, batch_size, signed=True, fmap_frac=0.01, num_stims=10000):
     assert data_w in [8, 16, 32]
-    model, device = getModel(model)
-    fms = getFMs(model, numBatches=num_batches, batchSize=batch_size, datasetPath=dataset_path, device=device, frac=fmap_frac)
-    fms_flat = torch.tensor([])
-    for fm in fms:
-        fms_flat = torch.cat([fms_flat, fm.to(torch.device('cpu')).view(-1)])
+    if model not in ['all_zeros', 'random']:
+        model, device = getModel(model)
+        fms = getFMs(model, numBatches=num_batches, batchSize=batch_size, datasetPath=dataset_path, device=device, frac=fmap_frac)
+        fms_flat = torch.tensor([])
+        for fm in fms:
+            fms_flat = torch.cat([fms_flat, fm.to(torch.device('cpu')).view(-1)])
 
-    fms_q, _, dtype = bpc.quantize(fms_flat, 'fixed{}'.format(data_w))
-    fms_q = fms_q.numpy().astype(dtype).tolist()
-    return fms_q
+        fms_q, _, dtype = bpc.quantize(fms_flat, 'fixed{}'.format(data_w))
+        data = fms_q.numpy().astype(dtype).tolist()
+    elif model == 'all_zeros':
+        data = [0] * num_stims
+    elif model == 'random':
+        data = [np.random.randint(-2**(data_w-1), 2**(data_w-1)) for l in range(num_stims)]
 
-def genFMStimFiles(file_prefixes, data_w, *args, modules=['encoder', 'decoder'], max_zrle_len=16, block_size=8, debug_file=None, num_words_w=24, **kwargs):
-    fms_q = getFMStimuli(*args, data_w=data_w, **kwargs)
+    return data
+
+def genStimFiles(file_prefixes, data_w, *args, modules=['encoder', 'decoder'], max_zrle_len=16, block_size=8, debug_file=None, num_words_w=24, **kwargs):
+    fms_q = getStimuli(*args, data_w=data_w, **kwargs)
     fms_q = np.array(fms_q)
     fms_bin = bpc.valuesToBinary(fms_q, data_w)
     fms_bin = split_str(fms_bin, data_w)
@@ -130,4 +136,5 @@ def genFMStimFiles(file_prefixes, data_w, *args, modules=['encoder', 'decoder'],
         write_sim_file(zip(bpc_vals), file_prefixes['decoder']+'_bpc_input.stim', len(bpc_vals))
         write_sim_file(zip(znz_vals), file_prefixes['decoder']+'_znz_input.stim', len(znz_vals))
         write_sim_file(zip(fms_bin, last_bin), file_prefixes['decoder']+'_data_output.expresp', len(fms_q))
+
 
