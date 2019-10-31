@@ -29,7 +29,8 @@ DATASET_PATH = '/scratch2/georgr/imagenet/imgs'
 DEBUG_FILE = '/home/georgr/projects/stream-ebpc/simvectors/dbg.rpt'
 
 MODULES = ['encoder', 'decoder']
-NETS = ['vgg16', 'resnet34', 'mobilenet2']
+#NETS = ['vgg16', 'resnet34', 'mobilenet2', 'random', 'all_zeros']
+NETS = ['random', 'all_zeros']
 #import pydevd_pycharm
 #pydevd_pycharm.settrace('localhost', port=9100, stdoutToServer=True, stderrToServer=True)
 

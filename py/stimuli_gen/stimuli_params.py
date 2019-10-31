@@ -8,7 +8,7 @@
 # CONDITIONS OF ANY KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations under the License.
 
-from common.data import genFMStimFiles
+from common.data import genStimFiles
 import os
 import random
 import numpy as np
@@ -35,10 +35,14 @@ class StimuliParams:
                     os.makedirs(sd)
                 except:
                     print("Problem creating directory {} - attempting to continue".format(sd))
-        filenames = {mod:os.path.join(stim_dirs[mod], self.net) + '_' +\
-        'f{}_'.format(self.frac) + 'bs{}_'.format(self.bs) +\
-        'nb{}_'.format(self.nb) + 'ww{}'.format(self.data_w) for mod in self.modules}
-        genFMStimFiles(file_prefixes=filenames, modules=self.modules,
+
+        if self.net not in ['all_zeros', 'random']:
+            filenames = {mod:os.path.join(stim_dirs[mod], self.net) + '_' +\
+                         'f{}_'.format(self.frac) + 'bs{}_'.format(self.bs) +\
+                         'nb{}_'.format(self.nb) + 'ww{}'.format(self.data_w) for mod in self.modules}
+        else:
+            filenames = {mod:os.path.join(stim_dirs[mod], self.net) for mod in self.modules}
+        genStimFiles(file_prefixes=filenames, modules=self.modules,
                        max_zrle_len=self.max_zrle_len, block_size=self.block_size,
                        model=self.net, dataset_path=self.dataset_path, data_w=self.data_w,
                        num_batches=self.nb, batch_size=self.bs, fmap_frac=self.frac, debug_file=self.debug_file)
