@@ -23,7 +23,19 @@ class HandshakeDrv
     automatic logic [DATA_W-1:0] dat;
     automatic int fh;
     automatic logic last;
-    fh                           = $fopen(file, "r");
+    automatic logic [8:0] testchar;
+    fh       = $fopen(file, "r");
+    if (fh == 0) begin
+      $display("fh: %d", fh);
+      $info("File %s does not exist - aborting read_outputs task.", file);
+      return;
+    end
+    testchar = $fgetc(fh);
+    if (testchar < 0) begin
+      $info("File %s is empty - aborting feed_inputs task.", file);
+      return;
+    end else
+      $rewind(fh);
     while (!$feof(fh)) begin
       cycles_to_wait = $urandom_range(MIN_WAIT, MAX_WAIT);
       if (HAS_LAST) begin
@@ -42,7 +54,19 @@ class HandshakeDrv
     automatic logic [DATA_W-1:0] dat_expected, dat_actual;
     automatic int fh;
     automatic logic last_expected, last_actual;
-    fh                           = $fopen(file, "r");
+    automatic logic [8:0] testchar;
+    fh       = $fopen(file, "r");
+    if (fh == 0) begin
+      $display("fh: %d", fh);
+      $info("File %s does not exist - aborting read_outputs task.", file);
+      return;
+    end
+    testchar = $fgetc(fh);
+    if (testchar < 0) begin
+      $info("File %s is empty - aborting read_outputs task.", file);
+      return;
+    end else
+      $rewind(fh);
     while (!$feof(fh)) begin
       cycles_to_wait = $urandom_range(MIN_WAIT, MAX_WAIT);
       if (HAS_LAST) begin
