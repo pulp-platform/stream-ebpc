@@ -24,7 +24,8 @@ module dbp_dbx_enc
    output logic                    vld_o,
    input logic                     rdy_i,
    output logic                    flush_o,
-   output logic                    idle_o
+   output logic                    idle_o,
+   output logic                    waiting_for_data_o
 );
 
   logic signed [DATA_W:0]                 diffs_d [0:BLOCK_SIZE-1], diffs_q [0:BLOCK_SIZE-1];
@@ -50,24 +51,27 @@ module dbp_dbx_enc
   assign dbp_block_o.base = diffs_q[BLOCK_SIZE-1][DATA_W-1:0];
 
   always_comb begin : fsm
-    diffs_d     = diffs_q;
-    state_d     = state_q;
-    fill_cnt_d  = fill_cnt_q;
-    rdy_o       = 1'b0;
-    vld_o       = 1'b0;
-    last_item_d = last_item_q;
-    shift       = 1'b0;
-    flush_o     = 1'b0;
-    idle_o      = 1'b0;
+    diffs_d            = diffs_q;
+    state_d            = state_q;
+    fill_cnt_d         = fill_cnt_q;
+    rdy_o              = 1'b0;
+    vld_o              = 1'b0;
+    last_item_d        = last_item_q;
+    shift              = 1'b0;
+    flush_o            = 1'b0;
+    idle_o             = 1'b0;
+    waiting_for_data_o = 1'b0;
+    
 
     case (state_q)
       idle: begin
         assert (fill_cnt_q==BLOCK_SIZE-1) else $display("Assertion fail @ time %t: fill_cnt_q is not BLOCK_SIZE-1 in idle state!", $time);
-        fill_cnt_d  = BLOCK_SIZE-1;
-        rdy_o       = 1'b1;
-        last_item_d = 'd0;
-        idle_o      = 1'b1;
-        flush_o = flush_i;
+        fill_cnt_d         = BLOCK_SIZE-1;
+        rdy_o              = 1'b1;
+        last_item_d        = 'd0;
+        idle_o             = 1'b1;
+        flush_o            = flush_i;
+        waiting_for_data_o = 1'b1;
         if (vld_i) begin
           idle_o      = 1'b0;
           last_item_d = data_i;
@@ -79,13 +83,15 @@ module dbp_dbx_enc
       end // case: idle
       fill: begin
         rdy_o = 1'b1;
+        waiting_for_data_o = 1'b1;
         if (vld_i) begin
           shift          = 1'b1;
           last_item_d    = data_i;
           fill_cnt_d     = fill_cnt_q-1;
           if (fill_cnt_q == 0) begin
-            last_item_d = 'd0;
-            state_d     = wait_out;
+            waiting_for_data_o = 1'b0;
+            last_item_d        = 'd0;
+            state_d            = wait_out;
           end
         end
       end

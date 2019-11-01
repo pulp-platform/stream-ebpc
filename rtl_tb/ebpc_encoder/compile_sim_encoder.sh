@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 TOP="ebpc_encoder_tb"
 CADENCE_IUS="cds_ius-18.09.005 xrun"
-XRUN_OPTIONS="-64bit -design_top ebpc_decoder_tb -sv -timescale 100ps/1ps -input encoder_xcelium_commands.tcl"
+XRUN_OPTIONS="-64bit -design_top ${TOP} -sv -timescale 100ps/1ps -input encoder_xcelium_commands.tcl"
 XRUN_GUI_OPTIONS="-access +rc -gui"
 QUESTA_VLOG="questa-2019.3 vlog"
 QUESTA_VSIM="questa-2019.3 vsim"
@@ -18,6 +18,7 @@ SV_SOURCES="../../src/ebpc_pkg.sv \
            ../../src/encoder/shift_streamer.sv \
            ../../src/encoder/zrle.sv \
            ../../src/fifo_slice.sv \
+           ../../src/clk_gate.sv \
            ../hs_intf.sv \
            ../hs_drivers.sv \
            ../rst_clk_drv.sv \
