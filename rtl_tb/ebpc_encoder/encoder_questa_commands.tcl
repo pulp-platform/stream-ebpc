@@ -1,2 +1,2 @@
-do decoder_wave.do
+do encoder_wave.do
 run -all
