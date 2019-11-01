@@ -23,7 +23,8 @@ module seq_coder
    output logic [DATA_W-1:0] data_o,
    output logic              vld_o,
    input logic               rdy_i,
-   output logic              idle_o
+   output logic              idle_o,
+   output logic              waiting_for_data_o
    );
 
 
@@ -61,6 +62,8 @@ module seq_coder
     assert (!(BLOCK_SIZE > DATA_W)) else $error("Error: BLOCK_SIZE can't be larger than DATA_W in seq_coder");
   end
 
+  assign waiting_for_data_o = !vld_from_slice;
+    
   always_comb begin : fsm
     automatic logic [$clog2(DATA_W):0] zeros;
     automatic logic write_zero = 1'b0, stall = 1'b0;

@@ -28,6 +28,9 @@ module ebpc_encoder
    );
 
 
+  logic                      bpc_encoder_clk;
+
+
   logic [DATA_W-1:0]         data_reg_d, data_reg_q;
   logic                      last_d, last_q;
   logic                      flush;
@@ -37,7 +40,7 @@ module ebpc_encoder
   logic                      vld_to_znz, rdy_from_znz;
   logic                      is_one_to_znz;
 
-  logic                      bpc_idle;
+  logic                      bpc_idle, bpc_waiting;
   logic                      znz_idle;
 
 
@@ -54,7 +57,7 @@ module ebpc_encoder
 
   assign last_d = last_i;
   assign data_reg_d = data_i;
-  
+
 
   always_comb begin : fsm
     automatic logic rdy_to_wait_for;
@@ -184,9 +187,17 @@ module ebpc_encoder
   end // block: sequential
 
 
+  clk_gate
+    bpc_clk_gate_i (
+                    .clk_i(clk_i),
+                    .en_i(vld_to_bpc || bpc_vld_o || (!bpc_waiting && !bpc_idle) || state_q == flush_st),
+                    .test_en_i(1'b0),
+                    .clk_o(bpc_encoder_clk)
+                    );
+
   bpc_encoder
     bpc_encoder_i (
-                   .clk_i(clk_i),
+                   .clk_i(bpc_encoder_clk),
                    .rst_ni(rst_ni),
                    .data_i(data_reg_q),
                    .flush_i(flush),
@@ -195,7 +206,8 @@ module ebpc_encoder
                    .data_o(bpc_data_o),
                    .vld_o(bpc_vld_o),
                    .rdy_i(bpc_rdy_i),
-                   .idle_o(bpc_idle)
+                   .idle_o(bpc_idle),
+                   .waiting_for_data_o(bpc_waiting)
                    );
 
   zrle

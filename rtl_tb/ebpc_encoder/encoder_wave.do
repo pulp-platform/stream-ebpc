@@ -26,6 +26,7 @@ add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/vld_to_znz
 add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/rdy_from_znz
 add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/is_one_to_znz
 add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/bpc_idle
+add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/bpc_waiting
 add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/znz_idle
 add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/wait_rdy_d
 add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/wait_rdy_q
@@ -33,6 +34,7 @@ add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/state_d
 add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/state_q
 add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/block_cnt_d
 add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/block_cnt_q
+add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/clk_i
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/data_i
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/flush_i
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/vld_i
@@ -41,6 +43,9 @@ add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/data_
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/vld_o
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/rdy_i
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/idle_o
+add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/waiting_for_data_o
+add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_waiting
+add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/sc_waiting
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_enc_to_coder
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/vld_enc_to_coder
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/rdy_coder_to_enc
@@ -56,6 +61,7 @@ add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i
 add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/rdy_i
 add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/flush_o
 add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/idle_o
+add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/waiting_for_data_o
 add wave -noupdate -group dbp_dbx -radix decimal /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/diffs_d
 add wave -noupdate -group dbp_dbx -radix decimal /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/diffs_q
 add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/last_item_d
@@ -65,7 +71,7 @@ add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i
 add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/fill_cnt_d
 add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/fill_cnt_q
 add wave -noupdate -group dbp_dbx /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/shift
-add wave -noupdate -group dbp_dbx -radix binary -childformat {{{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[0]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[1]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[2]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[3]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[4]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[5]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[6]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[7]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[8]} -radix binary}} -expand -subitemconfig {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[0]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[1]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[2]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[3]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[4]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[5]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[6]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[7]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[8]} {-radix binary}} /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp
+add wave -noupdate -group dbp_dbx -radix binary -childformat {{{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[0]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[1]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[2]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[3]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[4]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[5]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[6]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[7]} -radix binary} {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[8]} -radix binary}} -subitemconfig {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[0]} {-height 17 -radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[1]} {-height 17 -radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[2]} {-height 17 -radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[3]} {-height 17 -radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[4]} {-height 17 -radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[5]} {-height 17 -radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[6]} {-height 17 -radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[7]} {-height 17 -radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp[8]} {-height 17 -radix binary}} /ebpc_encoder_tb/dut_i/bpc_encoder_i/dbp_dbx_i/dbp
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_i
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/flush_i
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/vld_i
@@ -74,6 +80,7 @@ add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_cod
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/vld_o
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/rdy_i
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/idle_o
+add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/waiting_for_data_o
 add wave -noupdate -group seq_coder -radix binary -childformat {{/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp -radix binary -childformat {{{[0]} -radix binary} {{[1]} -radix binary} {{[2]} -radix binary} {{[3]} -radix binary} {{[4]} -radix binary} {{[5]} -radix binary} {{[6]} -radix binary} {{[7]} -radix binary} {{[8]} -radix binary}}} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.base -radix binary}} -subitemconfig {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp {-height 17 -radix binary -childformat {{{[0]} -radix binary} {{[1]} -radix binary} {{[2]} -radix binary} {{[3]} -radix binary} {{[4]} -radix binary} {{[5]} -radix binary} {{[6]} -radix binary} {{[7]} -radix binary} {{[8]} -radix binary}} -expand} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp[0]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp[1]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp[2]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp[3]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp[4]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp[5]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp[6]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp[7]} {-radix binary} {/ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.dbp[8]} {-radix binary} /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo.base {-height 17 -radix binary}} /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/dbp_block_from_fifo
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/code_symb
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/state_d
@@ -108,7 +115,7 @@ add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_code
 add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/st_d
 add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/st_q
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {0 ns} 0}
+WaveRestoreCursors {{Cursor 1} {3359629288 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 360
 configure wave -valuecolwidth 510
@@ -124,4 +131,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {32 ns}
+WaveRestoreZoom {0 ps} {9641258877 ps}
