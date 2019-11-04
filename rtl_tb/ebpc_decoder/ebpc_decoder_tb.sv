@@ -15,18 +15,35 @@ module ebpc_decoder_tb;
   
   localparam int unsigned DATA_W = 8;
   localparam int unsigned MIN_IN_WAIT_CYCLES = 0;
-  localparam int unsigned MAX_IN_WAIT_CYCLES = 3;
+  localparam int unsigned MAX_IN_WAIT_CYCLES = 0;
   localparam int unsigned MIN_OUT_WAIT_CYCLES = 0;
-  localparam int unsigned MAX_OUT_WAIT_CYCLES = 3;
+  localparam int unsigned MAX_OUT_WAIT_CYCLES = 0;
 
-  localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_num_words_input.stim";
-  localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_bpc_input.stim";
-  localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_znz_input.stim";
+  // localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.02_bs1_nb8_ww8_num_words_input.stim";
+  // localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.02_bs1_nb8_ww8_bpc_input.stim";
+  // localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.02_bs1_nb8_ww8_znz_input.stim";
 
-  localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_data_output.expresp";
+  // localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.02_bs1_nb8_ww8_data_output.expresp";
 
-  localparam time         CLK_PERIOD = 2.5ns;
-  localparam time         RST_TIME = 10.27*CLK_PERIOD;
+  localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_num_words_input.stim";
+  localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_bpc_input.stim";
+  localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_znz_input.stim";
+
+  localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_data_output.expresp";
+  
+  //localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/all_zeros/all_zeros_num_words_input.stim";
+  //localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/all_zeros/all_zeros_bpc_input.stim";
+  //localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/all_zeros/all_zeros_znz_input.stim";
+  //localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/all_zeros/all_zeros_data_output.expresp";
+
+  //localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/random/random_num_words_input.stim";
+//  localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/random/random_bpc_input.stim";
+  //localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/random/random_znz_input.stim";
+
+  //localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/random/random_data_output.expresp";
+
+  localparam time         CLK_PERIOD = 1.8ns;
+  localparam time         RST_TIME = 10*CLK_PERIOD;
   localparam time         TA = 0.15*CLK_PERIOD;
   localparam time         TT = 0.85*CLK_PERIOD;
 
