@@ -15,9 +15,9 @@ module ebpc_decoder_tb;
   
   localparam int unsigned DATA_W = 8;
   localparam int unsigned MIN_IN_WAIT_CYCLES = 0;
-  localparam int unsigned MAX_IN_WAIT_CYCLES = 3;
+  localparam int unsigned MAX_IN_WAIT_CYCLES = 0;
   localparam int unsigned MIN_OUT_WAIT_CYCLES = 0;
-  localparam int unsigned MAX_OUT_WAIT_CYCLES = 3;
+  localparam int unsigned MAX_OUT_WAIT_CYCLES = 0;
 
   localparam string       NUM_WORDS_STIM_FILE = "../../simvectors/decoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_num_words_input.stim";
   localparam string       BPC_STIM_FILE = "../../simvectors/decoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_bpc_input.stim";

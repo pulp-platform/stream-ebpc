@@ -12,9 +12,9 @@ module ebpc_encoder_tb;
   import ebpc_pkg::*;
 
   localparam int unsigned MIN_IN_WAIT_CYCLES = 0;
-  localparam int unsigned MAX_IN_WAIT_CYCLES = 3;
+  localparam int unsigned MAX_IN_WAIT_CYCLES = 0;
   localparam int unsigned MIN_OUT_WAIT_CYCLES = 0;
-  localparam int unsigned MAX_OUT_WAIT_CYCLES = 3;
+  localparam int unsigned MAX_OUT_WAIT_CYCLES = 0;
 
   localparam string       INPUT_STIM_FILE = "../../simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_input.stim";
   localparam string       BPC_EXPVAL_FILE = "../../simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_bpc.expresp";

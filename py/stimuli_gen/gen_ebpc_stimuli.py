@@ -11,12 +11,14 @@
 from stimuli_params import StimuliParams
 import random
 import numpy as np
+import torch
 
-random.seed(12)
-np.random.seed(13)
+torch.manual_seed(220)
+random.seed(9)
+np.random.seed(62)
 
 
-FM_FRAC = 0.01
+FM_FRAC = 0.05
 BATCH_SIZE = 1
 N_BATCH = 4
 DATA_W = 8
@@ -24,13 +26,14 @@ LOG_MAX_WORDS = 24
 MAX_ZRLE_LEN = 16
 BLOCK_SIZE = 8
 #Adjust these to your needs - it's recommended to use absolute paths.
-BASE_STIM_DIRECTORY = '/home/georgr/projects/stream-ebpc/simvectors'
-DATASET_PATH = '/scratch2/georgr/imagenet/imgs'
-DEBUG_FILE = '/home/georgr/projects/stream-ebpc/simvectors/dbg.rpt'
+BASE_STIM_DIRECTORY = '/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors'
+DATASET_PATH = '/usr/scratch2/risa/georgr/imagenet/imgs'
+DEBUG_FILE = None
 
 MODULES = ['encoder', 'decoder']
 #NETS = ['vgg16', 'resnet34', 'mobilenet2', 'random', 'all_zeros']
-NETS = ['random', 'all_zeros']
+NETS = ['vgg16', 'resnet34']
+#NETS = ['random', 'all_zeros']
 #import pydevd_pycharm
 #pydevd_pycharm.settrace('localhost', port=9100, stdoutToServer=True, stderrToServer=True)
 
