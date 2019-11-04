@@ -37,10 +37,10 @@ module ebpc_encoder_tb;
   //localparam string       INPUT_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/random/random_input.stim";
   //localparam string       BPC_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/random/random_bpc.expresp";
   //localparam string       ZNZ_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/random/random_znz.expresp";
-  
+
   localparam time         CLK_PERIOD = 1.8ns;
   localparam time         RST_TIME = 10*CLK_PERIOD;
-  localparam time         TA = 0.15*CLK_PERIOD;
+  localparam time         TA = 0.2*CLK_PERIOD;
   localparam time         TT = 0.85*CLK_PERIOD;
 
   logic                   clk;

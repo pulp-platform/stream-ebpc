@@ -25,11 +25,17 @@ module ebpc_decoder_tb;
 
   // localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.02_bs1_nb8_ww8_data_output.expresp";
 
-  localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_num_words_input.stim";
-  localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_bpc_input.stim";
-  localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_znz_input.stim";
+  // localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_num_words_input.stim";
+  // localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_bpc_input.stim";
+  // localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_znz_input.stim";
 
-  localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_data_output.expresp";
+  // localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_data_output.expresp";
+
+  localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_num_words_input.stim";
+  localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_bpc_input.stim";
+  localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_znz_input.stim";
+
+  localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_data_output.expresp";
   
   //localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/all_zeros/all_zeros_num_words_input.stim";
   //localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/all_zeros/all_zeros_bpc_input.stim";
