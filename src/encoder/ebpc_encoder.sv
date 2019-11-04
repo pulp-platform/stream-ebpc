@@ -199,7 +199,7 @@ module ebpc_encoder
     bpc_encoder_i (
                    .clk_i(bpc_encoder_clk),
                    .rst_ni(rst_ni),
-                   .data_i(data_reg_q),
+                   .data_i(data_to_bpc),
                    .flush_i(flush),
                    .vld_i(vld_to_bpc),
                    .rdy_o(rdy_from_bpc),
