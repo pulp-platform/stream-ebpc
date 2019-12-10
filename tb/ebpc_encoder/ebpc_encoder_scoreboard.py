@@ -69,7 +69,7 @@ class EBPCEncoderScoreboard:
 
     def gen_fmap_stimuli(self, model, dataset_path, num_batches, batch_size, signed=True, fmap_frac=0.01):
         assert self.data_w in [8, 16, 32]
-        fms_q = data.getFMStimuli(model=model, dataset_path=dataset_path, data_w=self.data_w, num_batches=num_batches, batch_size=batch_size, signed=signed, fmap_frac=fmap_frac)
+        fms_q = data.getStimuli(model=model, dataset_path=dataset_path, data_w=self.data_w, num_batches=num_batches, batch_size=batch_size, signed=signed, fmap_frac=fmap_frac)
         nz_data = [el for el in fms_q if el != 0]
         nz_data = zero_pad_list(nz_data, self.block_size)
         znz_stream = [0 if el==0 else 1 for el in fms_q]

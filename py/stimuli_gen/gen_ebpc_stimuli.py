@@ -13,9 +13,10 @@ import random
 import numpy as np
 import torch
 
-torch.manual_seed(61117)
-random.seed(6)
-np.random.seed(1346)
+torch.manual_seed(220)
+random.seed(9)
+np.random.seed(62)
+
 
 
 FM_FRAC = 0.01
@@ -33,8 +34,7 @@ SAFETY_FAC = 0.75
 
 MODULES = ['encoder', 'decoder']
 #NETS = ['vgg16', 'resnet34', 'mobilenet2', 'random', 'all_zeros']
-NETS = ['resnet34']
-#NETS = ['vgg16', 'resnet34']
+NETS = ['vgg16', 'resnet34']
 #NETS = ['random', 'all_zeros']
 #import pydevd_pycharm
 #pydevd_pycharm.settrace('risa', port=9100, stdoutToServer=True, stderrToServer=True)

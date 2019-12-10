@@ -43,7 +43,7 @@ def getModel(modelName, epoch=None):
     return model, device
 
 
-def getFMs(model, device, datasetPath, quant=8, numBatches=1, batchSize=10, safetyFactor=0.75, frac=0.01):
+def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=1.0, frac=0.01):
 
     # CREATE DATASET LOADERS
     #import quantLab.quantlab.ImageNet.preprocess as pp
@@ -111,7 +111,7 @@ def getStimuli(model, dataset_path, data_w, num_batches, batch_size, signed=True
         return dt_dict[q]
     if model not in ['all_zeros', 'random']:
         model, device = getModel(model)
-        fms = getFMs(model, numBatches=num_batches, quant=data_w, batchSize=batch_size, datasetPath=dataset_path, device=device, frac=fmap_frac, safetyFactor=safety_factor)
+        fms = getFMs(model, numBatches=num_batches, batchSize=batch_size, datasetPath=dataset_path, device=device, frac=fmap_frac, safetyFactor=safety_factor)
         fms_flat = torch.tensor([])
         for fm in fms:
             #safety_factor is already applied in getFMs
