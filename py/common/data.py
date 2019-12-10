@@ -1,5 +1,5 @@
 # Copyright (c) 2019 ETH Zurich, Lukas Cavigelli, Georg Rutishauser, Luca Benini
-# This file, licensed under Apache 2.0 was taken from
+# This file, licensed under Apache 2.0 was adapted from
 # https://github.com/lukasc-ch/ExtendedBitPlaneCompression,
 # commit 0b175d0d35937b3f2724fe59b0c6cc82802556f6
 
@@ -43,7 +43,7 @@ def getModel(modelName, epoch=None):
     return model, device
 
 
-def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=1.0, frac=0.01):
+def getFMs(model, device, datasetPath, quant=8, numBatches=1, batchSize=10, safetyFactor=0.75, frac=0.01):
 
     # CREATE DATASET LOADERS
     #import quantLab.quantlab.ImageNet.preprocess as pp
@@ -74,18 +74,21 @@ def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=
     #register hooks to get intermediate outputs:
     def setupFwdHooks(modules):
       outputs = []
+      outputs_f = []
       def hook(module, input, output):
-          outputs.append(filter_fmaps(output.detach().contiguous().clone(), frac))
+          fm = output.detach().contiguous().clone()
+          #fm_q, _, dtype = bpc.quantize(fm, quant='fixed{}'.format(quant), safetyFactor=safetyFactor, normalize=True)
+          outputs_f.append(filter_fmaps(fm, frac))
+          outputs.append(fm)
       for m in modules:
-        m.register_forward_hook(hook)
-      return outputs
+          m.register_forward_hook(hook)
+      return outputs_f, outputs
 
-    outputsReLU = setupFwdHooks(msReLU)
+    outputsReLU, outputsReLU_complete = setupFwdHooks(msReLU)
+    
 
     # PASS IMAGES THROUGH NETWORK
     dataIterator = iter(dataLoader)
-
-
 
     for _ in range(numBatches):
       (image, target) = next(dataIterator)
@@ -93,21 +96,31 @@ def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=
       model.eval()
       outp = model(image)
 
+    outputs_max = [outp.max().item() for outp in outputsReLU_complete]
+    for op, opmax in zip(outputsReLU, outputs_max):
+        op.mul_(safetyFactor/opmax)
+
     return outputsReLU
 
 
 
-def getStimuli(model, dataset_path, data_w, num_batches, batch_size, signed=True, fmap_frac=0.01, num_stims=10000):
+def getStimuli(model, dataset_path, data_w, num_batches, batch_size, signed=True, safety_factor=0.75, fmap_frac=0.01, num_stims=10000):
     assert data_w in [8, 16, 32]
+    def get_dtype(q):
+        dt_dict = {8:np.int8, 16:np.int16, 32:np.int32}
+        return dt_dict[q]
     if model not in ['all_zeros', 'random']:
         model, device = getModel(model)
-        fms = getFMs(model, numBatches=num_batches, batchSize=batch_size, datasetPath=dataset_path, device=device, frac=fmap_frac)
+        fms = getFMs(model, numBatches=num_batches, quant=data_w, batchSize=batch_size, datasetPath=dataset_path, device=device, frac=fmap_frac, safetyFactor=safety_factor)
         fms_flat = torch.tensor([])
         for fm in fms:
-            fms_flat = torch.cat([fms_flat, fm.to(torch.device('cpu')).view(-1)])
+            #safety_factor is already applied in getFMs
+            fm_quant, _, dtype = bpc.quantize(fm, safetyFactor=1.0, normalize=False, quant='fixed{}'.format(data_w))
+            fms_flat = torch.cat([fms_flat, fm_quant.to(torch.device('cpu')).view(-1)])
 
-        fms_q, _, dtype = bpc.quantize(fms_flat, normalize=True, quant='fixed{}'.format(data_w))
-        data = fms_q.numpy().astype(dtype).tolist()
+        #fms_q, _, dtype = bpc.quantize(fms_flat, normalize=True, quant='fixed{}'.format(data_w))
+        #data = fms_q.numpy().astype(dtype).tolist()
+        data = fms_flat.numpy().astype(get_dtype(data_w)).tolist()
     elif model == 'all_zeros':
         data = [0] * num_stims
     elif model == 'random':
