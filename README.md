@@ -149,7 +149,19 @@ symbols are packed into words, so the encoded stream looks like this:
 
 ![](./fig/out_streams.png)
 
-## Simulating the Designs
+## Python Environment
+
+A conda environment YAML file is provided in the `py` folder. It
+specifies all the python packages needed to simulate the designs with
+cocotb, generate stimuli etc. To use it, you will need
+Anaconda3/Miniconda3. From the `py` folder, type the following command
+to create an environment called `stream-ebpc`:
+
+``` bash
+conda env create -n stream-ebpc -f environment.yml
+```
+
+## Simulating the Designs with cocotb
 
 Our testbenches are written in Python using
 [cocotb](https://github.com/cocotb/cocotb). There are testbenches
@@ -201,6 +213,30 @@ images. Note that even just a single images produces massive amounts of
 stimuli data, so only a fraction of the feature maps are actually fed to
 the hardware (the fraction can be changed with the `FMAP_FRAC`
 variable).
+
+## Simulating the Designs with the RTL TBs
+
+In the `rtl_tb` folder, there are file-based testbenches for the EBPC
+encoder and decoder. Compilation and simulation scripts for Mentor
+QuestaSim and Cadence IUS (unsupported) are included. To simulate the
+designs using these file-based testbenches, you will need to perform 3
+steps:
+
+1.  Adapt the `CADENCE_IUS` or `QUESTA_VLOG` and `QUESTA_VSIM` variables
+    in the `compile_sim_{design}.sh` scripts to your system - usually,
+    the appropriate values are `xrun`, `vlog` and `vsim` respectively.
+2.  Generate stimuli using the python script in the `py/stimuli_gen`
+    folder. It can be configured to generate feature map stimuli from
+    various networks, using a configurable fraction of the feature maps
+    (using all feature maps would result in excessive file sizes and
+    simulation times). Edit the script to configure parameters such as
+    `BASE_STIM_DIRECTORY` (where stimuli files are stored), `NETS`
+    (which nets are used to extract feature map stimuli - `random` and
+    `all_zeros` are also valid options) etc.
+3.  configure the correct stimuli file paths in the `ebpc_encoder_tb.sv`
+    and `ebpc_decoder_tb.sv` files in the `rtl_tb` subfolders.
+
+If any issues arise, do not hesitate to contact us.
 
 ## Contact
 
