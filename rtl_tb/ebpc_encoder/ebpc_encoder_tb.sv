@@ -17,26 +17,9 @@ module ebpc_encoder_tb;
   localparam int unsigned MIN_OUT_WAIT_CYCLES = 0;
   localparam int unsigned MAX_OUT_WAIT_CYCLES = 0;
 
-  //localparam string       INPUT_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_input.stim";
-  //localparam string       BPC_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_bpc.expresp";
-  //localparam string       ZNZ_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/vgg16/vgg16_f0.01_bs1_nb4_ww8_znz.expresp";
-
-  // localparam string       INPUT_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/all_zeros/all_zeros_input.stim";
-  // localparam string       BPC_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/all_zeros/all_zeros_bpc.expresp";
-  // localparam string       ZNZ_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/all_zeros/all_zeros_znz.expresp";
-
-  // localparam string       INPUT_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_input.stim";
-  // localparam string BPC_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_bpc.expresp";
-  // localparam string ZNZ_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/vgg16/vgg16_f0.05_bs1_nb4_ww8_znz.expresp";
-
   localparam string       INPUT_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_input.stim";
   localparam string BPC_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_bpc.expresp";
   localparam string ZNZ_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_znz.expresp";
-
-
-  //localparam string       INPUT_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/random/random_input.stim";
-  //localparam string       BPC_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/random/random_bpc.expresp";
-  //localparam string       ZNZ_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/random/random_znz.expresp";
 
   localparam time         CLK_PERIOD = 1.8ns;
   localparam time         RST_TIME = 10*CLK_PERIOD;
