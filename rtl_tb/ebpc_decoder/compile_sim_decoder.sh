@@ -2,10 +2,13 @@
 #change executable names to match your system setup
 TOP="ebpc_decoder_tb"
 CADENCE_IUS="cds_ius-18.09.005 xrun"
+#CADENCE_IUS="xrun"
 XRUN_OPTIONS="-64bit -design_top ${TOP} -sv -timescale 100ps/1ps -input decoder_xcelium_commands.tcl"
 XRUN_GUI_OPTIONS="-access +rc -gui"
 QUESTA_VLOG="questa-2019.3 vlog"
+#QUESTA_VLOG="vlog"
 QUESTA_VSIM="questa-2019.3 vsim"
+#QUESTA_VSIM="vsim"
 QUESTA_OPTIONS="-do decoder_questa_commands.tcl -64 -t 1ps"
 QUESTA_BATCH_OPTIONS="-batch"
 

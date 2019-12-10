@@ -1,10 +1,13 @@
 #! /usr/bin/env bash
 TOP="ebpc_encoder_tb"
 CADENCE_IUS="cds_ius-18.09.005 xrun"
+#CADENCE_IUS="xrun"
 XRUN_OPTIONS="-64bit -design_top ${TOP} -sv -timescale 100ps/1ps -input encoder_xcelium_commands.tcl"
 XRUN_GUI_OPTIONS="-access +rc -gui"
 QUESTA_VLOG="questa-2019.3 vlog"
+#QUESTA_VLOG="vlog"
 QUESTA_VSIM="questa-2019.3 vsim"
+#QUESTA_VSIM="vsim"
 QUESTA_OPTIONS="-do encoder_questa_commands.tcl -64 -t 1ps"
 QUESTA_BATCH_OPTIONS="-batch"
 
