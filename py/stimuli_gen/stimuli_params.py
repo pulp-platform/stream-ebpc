@@ -14,7 +14,7 @@ import random
 import numpy as np
 
 class StimuliParams:
-    def __init__(self, network, fm_frac, batch_size, n_batches, data_w, modules, max_zrle_len, block_size, dataset_path, num_words_width, debug_file=None):
+    def __init__(self, network, fm_frac, batch_size, n_batches, data_w, modules, max_zrle_len, block_size, dataset_path, num_words_width, safety_factor=0.75, debug_file=None):
         self.net = network
         self.frac = fm_frac
         self.bs = batch_size
@@ -26,6 +26,7 @@ class StimuliParams:
         self.dataset_path = dataset_path
         self.debug_file = debug_file
         self.nww = num_words_width
+        self.sf = safety_factor
 
     def write(self, base_dir):
         stim_dirs = {mod:os.path.join(base_dir, mod, self.net) for mod in self.modules}
@@ -45,4 +46,4 @@ class StimuliParams:
         genStimFiles(file_prefixes=filenames, modules=self.modules,
                        max_zrle_len=self.max_zrle_len, block_size=self.block_size,
                        model=self.net, dataset_path=self.dataset_path, data_w=self.data_w,
-                       num_batches=self.nb, batch_size=self.bs, fmap_frac=self.frac, debug_file=self.debug_file)
+                       num_batches=self.nb, batch_size=self.bs, fmap_frac=self.frac, debug_file=self.debug_file, safety_factor=self.sf)

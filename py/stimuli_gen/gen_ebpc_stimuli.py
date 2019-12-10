@@ -13,14 +13,14 @@ import random
 import numpy as np
 import torch
 
-torch.manual_seed(220)
-random.seed(9)
-np.random.seed(62)
+torch.manual_seed(61117)
+random.seed(6)
+np.random.seed(1346)
 
 
-FM_FRAC = 0.05
-BATCH_SIZE = 1
-N_BATCH = 4
+FM_FRAC = 0.01
+BATCH_SIZE = 64
+N_BATCH = 1
 DATA_W = 8
 LOG_MAX_WORDS = 24
 MAX_ZRLE_LEN = 16
@@ -29,18 +29,24 @@ BLOCK_SIZE = 8
 BASE_STIM_DIRECTORY = '/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors'
 DATASET_PATH = '/usr/scratch2/risa/georgr/imagenet/imgs'
 DEBUG_FILE = None
+SAFETY_FAC = 0.75
 
 MODULES = ['encoder', 'decoder']
 #NETS = ['vgg16', 'resnet34', 'mobilenet2', 'random', 'all_zeros']
-NETS = ['vgg16', 'resnet34']
+NETS = ['resnet34']
+#NETS = ['vgg16', 'resnet34']
 #NETS = ['random', 'all_zeros']
 #import pydevd_pycharm
-#pydevd_pycharm.settrace('localhost', port=9100, stdoutToServer=True, stderrToServer=True)
+#pydevd_pycharm.settrace('risa', port=9100, stdoutToServer=True, stderrToServer=True)
 
 stims = []
 for net in NETS:
     dbg_f = DEBUG_FILE if net == 'vgg16' else None
-    stims.append(StimuliParams(network=net, fm_frac=FM_FRAC, batch_size=BATCH_SIZE, modules=MODULES, n_batches=N_BATCH, data_w=DATA_W, max_zrle_len=MAX_ZRLE_LEN, block_size=BLOCK_SIZE, dataset_path=DATASET_PATH, num_words_width=LOG_MAX_WORDS, debug_file=dbg_f))
+    stims.append(StimuliParams(network=net, fm_frac=FM_FRAC,
+                               batch_size=BATCH_SIZE, modules=MODULES, n_batches=N_BATCH, data_w=DATA_W,
+                               max_zrle_len=MAX_ZRLE_LEN, block_size=BLOCK_SIZE,
+                               dataset_path=DATASET_PATH, num_words_width=LOG_MAX_WORDS,
+                               debug_file=dbg_f, safety_factor=SAFETY_FAC))
 
 for stim in stims:
     stim.write(BASE_STIM_DIRECTORY)
