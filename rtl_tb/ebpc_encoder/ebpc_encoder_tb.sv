@@ -49,8 +49,8 @@ module ebpc_encoder_tb;
                  .DATA_W(DATA_W),
                  .TA(TA),
                  .TT(TT),
-                 .MIN_WAIT(MIN_IN_WAIT_CYCLES),
-                 .MAX_WAIT(MAX_IN_WAIT_CYCLES),
+                 .MIN_WAIT(MIN_OUT_WAIT_CYCLES),
+                 .MAX_WAIT(MAX_OUT_WAIT_CYCLES),
                  .HAS_LAST(1'b0),
                  .NAME("BPC Output")
                  )
@@ -60,8 +60,8 @@ module ebpc_encoder_tb;
                  .DATA_W(DATA_W),
                  .TA(TA),
                  .TT(TT),
-                 .MIN_WAIT(MIN_IN_WAIT_CYCLES),
-                 .MAX_WAIT(MAX_IN_WAIT_CYCLES),
+                 .MIN_WAIT(MIN_OUT_WAIT_CYCLES),
+                 .MAX_WAIT(MAX_OUT_WAIT_CYCLES),
                  .HAS_LAST(1'b0),
                  .NAME("ZNZ Output")
                  )
