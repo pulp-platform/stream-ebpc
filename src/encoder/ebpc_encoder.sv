@@ -20,6 +20,7 @@ module ebpc_encoder
    output logic              rdy_o,
    output logic              idle_o,
    output logic [DATA_W-1:0] znz_data_o,
+   output logic              znz_last_o,
    output logic              znz_vld_o,
    input logic               znz_rdy_i,
    output logic [DATA_W-1:0] bpc_data_o,
@@ -219,6 +220,7 @@ module ebpc_encoder
             .vld_i(vld_to_znz),
             .rdy_o(rdy_from_znz),
             .data_o(znz_data_o),
+            .last_o(znz_last_o),
             .vld_o(znz_vld_o),
             .rdy_i(znz_rdy_i),
             .idle_o(znz_idle)

@@ -146,11 +146,12 @@ def genStimFiles(file_prefixes, data_w, *args, modules=['encoder', 'decoder'], m
     nw_bin = bpc.valuesToBinary(np.array([len(fms_q)-1]), num_words_w)
     compr_ratio = len(fms_q)/(len(bpc_vals)+len(znz_vals))
     sparsity = 1 - len(nz_data)/len(fms_q)
+    znz_last = ['0']*(len(znz_vals)-1) + ['1']
     stat_dict = {'Compression Ratio':compr_ratio, 'Sparsity':sparsity, '# of Stimuli':len(fms_q)}
     if 'encoder' in modules:
         write_sim_file(data=zip(fms_bin, last_bin), filename=file_prefixes['encoder']+'_input.stim', length=len(fms_bin))
         write_sim_file(zip(bpc_vals), file_prefixes['encoder']+'_bpc.expresp', len(bpc_vals))
-        write_sim_file(zip(znz_vals), file_prefixes['encoder']+'_znz.expresp', len(znz_vals))
+        write_sim_file(zip(znz_vals, znz_last), file_prefixes['encoder']+'_znz.expresp', len(znz_vals))
         write_stats(file_prefixes['encoder']+'_stats.log', stat_dict)
     if 'decoder' in modules:
         write_sim_file(data=zip([nw_bin]), filename=file_prefixes['decoder']+'_num_words_input.stim', length=1)
