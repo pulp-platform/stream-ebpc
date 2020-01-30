@@ -85,7 +85,6 @@ def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=
       return outputs_f, outputs
 
     outputsReLU, outputsReLU_complete = setupFwdHooks(msReLU)
-    
 
     # PASS IMAGES THROUGH NETWORK
     dataIterator = iter(dataLoader)
@@ -104,12 +103,12 @@ def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=
 
 
 
-def getStimuli(model, dataset_path, data_w, num_batches, batch_size, signed=True, safety_factor=0.75, fmap_frac=0.01, num_stims=10000):
+def getStimuli(model, dataset_path, data_w, num_batches, batch_size, signed=True, safety_factor=0.75, fmap_frac=0.01, num_stims=10000, block_size=8):
     assert data_w in [8, 16, 32]
     def get_dtype(q):
         dt_dict = {8:np.int8, 16:np.int16, 32:np.int32}
         return dt_dict[q]
-    if model not in ['all_zeros', 'random']:
+    if model not in ['all_zeros', 'random', 'last_test']:
         model, device = getModel(model)
         fms = getFMs(model, numBatches=num_batches, batchSize=batch_size, datasetPath=dataset_path, device=device, frac=fmap_frac, safetyFactor=safety_factor)
         fms_flat = torch.tensor([])
@@ -125,7 +124,11 @@ def getStimuli(model, dataset_path, data_w, num_batches, batch_size, signed=True
         data = [0] * num_stims
     elif model == 'random':
         data = [np.random.randint(-2**(data_w-1), 2**(data_w-1)) for l in range(num_stims)]
-
+    elif model == 'last_test':
+        num_stims = num_stims + (-num_stims % block_size)
+        # construct a case where there are no zeros, an integer number of
+        # blocks of nonzero values and a bunch of zeros afterwards
+        data = [np.random.randint(1, 2**(data_w-1)) for l in range(num_stims)] + 100 * [0]
     return data
 
 def write_stats(f, stat_dict):
@@ -141,16 +144,27 @@ def genStimFiles(file_prefixes, data_w, *args, modules=['encoder', 'decoder'], m
     last_bin = ['0']*(len(fms_q)-1) + ['1']
     nz_data = [el for el in fms_q if el != 0]
     nz_data_padded = zero_pad_list(nz_data, block_size)
-    bpc_vals = bpc.BPC_words(np.array(nz_data_padded), block_size=block_size, variant='paper', word_w=8, dbg_fn=debug_file)
+    bpc_vals, mod_bpc_len = bpc.BPC_words(np.array(nz_data_padded), block_size=block_size, variant='paper', word_w=8, dbg_fn=debug_file, return_mod_len=True)
+    while kwargs['model']=='last_test' and mod_bpc_len != 0:
+        fms_q = getStimuli(*args, data_w=data_w, **kwargs)
+        fms_q = np.array(fms_q)
+        fms_bin = bpc.valuesToBinary(fms_q, data_w)
+        fms_bin = split_str(fms_bin, data_w)
+        last_bin = ['0']*(len(fms_q)-1) + ['1']
+        nz_data = [el for el in fms_q if el != 0]
+        nz_data_padded = zero_pad_list(nz_data, block_size)
+        bpc_vals, mod_bpc_len = bpc.BPC_words(np.array(nz_data_padded), block_size=block_size, variant='paper', word_w=8, dbg_fn=debug_file, return_mod_len=True)
+
     znz_vals = bpc.ZRLE_words(fms_q, max_burst_len=max_zrle_len, wordwidth=data_w)
     nw_bin = bpc.valuesToBinary(np.array([len(fms_q)-1]), num_words_w)
     compr_ratio = len(fms_q)/(len(bpc_vals)+len(znz_vals))
     sparsity = 1 - len(nz_data)/len(fms_q)
     znz_last = ['0']*(len(znz_vals)-1) + ['1']
+    bpc_last = ['0']*(len(bpc_vals)-1) + ['1']
     stat_dict = {'Compression Ratio':compr_ratio, 'Sparsity':sparsity, '# of Stimuli':len(fms_q)}
     if 'encoder' in modules:
         write_sim_file(data=zip(fms_bin, last_bin), filename=file_prefixes['encoder']+'_input.stim', length=len(fms_bin))
-        write_sim_file(zip(bpc_vals), file_prefixes['encoder']+'_bpc.expresp', len(bpc_vals))
+        write_sim_file(zip(bpc_vals, bpc_last), file_prefixes['encoder']+'_bpc.expresp', len(bpc_vals))
         write_sim_file(zip(znz_vals, znz_last), file_prefixes['encoder']+'_znz.expresp', len(znz_vals))
         write_stats(file_prefixes['encoder']+'_stats.log', stat_dict)
     if 'decoder' in modules:

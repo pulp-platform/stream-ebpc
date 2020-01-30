@@ -61,7 +61,6 @@ module dbp_dbx_enc
     flush_o            = 1'b0;
     idle_o             = 1'b0;
     waiting_for_data_o = 1'b0;
-    
 
     case (state_q)
       idle: begin
@@ -117,7 +116,6 @@ module dbp_dbx_enc
         diffs_d[i] = diffs_q[i-1];
   //  end
   end // block: fsm
-
 
   always @(posedge clk_i or negedge rst_ni) begin : sequential
     if (~rst_ni) begin

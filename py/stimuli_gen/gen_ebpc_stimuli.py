@@ -36,6 +36,7 @@ MODULES = ['encoder', 'decoder']
 #NETS = ['vgg16', 'resnet34', 'mobilenet2', 'random', 'all_zeros']
 #NETS = ['vgg16', 'resnet34']
 NETS = ['resnet34']
+#NETS = ['last_test']
 #NETS = ['random', 'all_zeros']
 #import pydevd_pycharm
 #pydevd_pycharm.settrace('risa', port=9100, stdoutToServer=True, stderrToServer=True)

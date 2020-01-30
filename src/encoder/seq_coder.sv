@@ -21,6 +21,7 @@ module seq_coder
    output logic              rdy_o,
    // data out interface
    output logic [DATA_W-1:0] data_o,
+   output logic              last_o,
    output logic              vld_o,
    input logic               rdy_i,
    output logic              idle_o,
@@ -63,7 +64,7 @@ module seq_coder
   end
 
   assign waiting_for_data_o = !vld_from_slice;
-    
+
   always_comb begin : fsm
     automatic logic [$clog2(DATA_W):0] zeros;
     automatic logic write_zero = 1'b0, stall = 1'b0;
@@ -201,6 +202,7 @@ module seq_coder
                 .vld_i(shift_vld),
                 .rdy_o(shift_rdy),
                 .data_o(data_o),
+                .last_o(last_o),
                 .vld_o(vld_o),
                 .rdy_i(rdy_i),
                 .idle_o(streamer_idle)

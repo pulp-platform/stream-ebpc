@@ -13,17 +13,18 @@ import ebpc_pkg::*;
 
 module shift_streamer
   (
-   input logic                            clk_i,
-   input logic                            rst_ni,
-   input logic [2*DATA_W-1:0]             data_i,
+   input logic                        clk_i,
+   input logic                        rst_ni,
+   input logic [2*DATA_W-1:0]         data_i,
    input logic [$clog2(DATA_W+1)-1:0] shift_i,
-   input logic                            flush_i,
-   input logic                            vld_i,
-   output logic                           rdy_o,
-   output logic [DATA_W-1:0]              data_o,
-   output logic                           vld_o,
-   input logic                            rdy_i,
-   output logic idle_o
+   input logic                        flush_i,
+   input logic                        vld_i,
+   output logic                       rdy_o,
+   output logic [DATA_W-1:0]          data_o,
+   output logic                       last_o,
+   output logic                       vld_o,
+   input logic                        rdy_i,
+   output logic                       idle_o
    );
 
   // can probably save one flipflop by making this register one bit less wide
@@ -39,6 +40,7 @@ always_comb begin : fsm
   stream_reg_d = stream_reg_q;
   shift_cnt_d  = shift_cnt_q;
   st_d         = st_q;
+  last_o       = 1'b0;
   rdy_o        = 1'b0;
   vld_o        = 1'b0;
   idle_o       = 1'b0;
@@ -76,7 +78,9 @@ always_comb begin : fsm
         st_d = flush;
     end // case: filling
     full: begin
-      vld_o = 1'b1;
+      vld_o  = 1'b1;
+      // For this to work, the flush_i has to be applied until idle_o goes high (as it is done in ebpc_encoder)!
+      last_o = flush_i && (shift_cnt_q == DATA_W);
       if (rdy_i) begin
         rdy_o       = 1'b1;
         if (vld_i) begin
@@ -98,6 +102,7 @@ always_comb begin : fsm
     flush: begin
       assert(shift_cnt_q >0) else $display("Assertion failed in shift_streamer @ time %t - shift_cnt is 0 in flush state!", $time);
       vld_o = 1'b1;
+      last_o = 1'b1;
       if (rdy_i) begin
         stream_reg_d = {stream_reg_q[DATA_W-1:0], {DATA_W{1'b0}}};
         if (shift_cnt_q > DATA_W) begin
