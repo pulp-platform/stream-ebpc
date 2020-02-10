@@ -17,9 +17,13 @@ module ebpc_encoder_tb;
   localparam int unsigned MIN_OUT_WAIT_CYCLES = 0;
   localparam int unsigned MAX_OUT_WAIT_CYCLES = 0;
 
-  localparam string       INPUT_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_input.stim";
-  localparam string BPC_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_bpc.expresp";
-  localparam string ZNZ_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/encoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_znz.expresp";
+  localparam string       INPUT_STIM_FILE = "/home/georgr/projects/stream-ebpc/simvectors/encoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_input.stim";
+  localparam string BPC_EXPVAL_FILE = "/home/georgr/projects/stream-ebpc/simvectors/encoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_bpc.expresp";
+  localparam string ZNZ_EXPVAL_FILE = "/home/georgr/projects/stream-ebpc/simvectors/encoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_znz.expresp";
+
+  // localparam string INPUT_STIM_FILE = "/home/georgr/projects/stream-ebpc/simvectors/encoder/last_test/last_test_f0.05_bs1_nb4_ww8_input.stim";
+  // localparam string BPC_EXPVAL_FILE = "/home/georgr/projects/stream-ebpc/simvectors/encoder/last_test/last_test_f0.05_bs1_nb4_ww8_bpc.expresp";
+  // localparam string ZNZ_EXPVAL_FILE = "/home/georgr/projects/stream-ebpc/simvectors/encoder/last_test/last_test_f0.05_bs1_nb4_ww8_znz.expresp";
 
   localparam time         CLK_PERIOD = 1.8ns;
   localparam time         RST_TIME = 10*CLK_PERIOD;
@@ -51,7 +55,7 @@ module ebpc_encoder_tb;
                  .TT(TT),
                  .MIN_WAIT(MIN_OUT_WAIT_CYCLES),
                  .MAX_WAIT(MAX_OUT_WAIT_CYCLES),
-                 .HAS_LAST(1'b0),
+                 .HAS_LAST(1'b1),
                  .NAME("BPC Output")
                  )
   bpc_drv;
@@ -68,7 +72,6 @@ module ebpc_encoder_tb;
   znz_drv;
 
  initial begin
-   bpc_if.last = 1'b0;
    in_drv      = new(in_if);
    in_drv.reset_out();
    bpc_drv = new(bpc_if);
