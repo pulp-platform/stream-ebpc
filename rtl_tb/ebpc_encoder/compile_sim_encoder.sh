@@ -14,12 +14,12 @@ QUESTA_BATCH_OPTIONS="-batch"
 SV_SOURCES="../../src/ebpc_pkg.sv \
            ../../src/encoder/bpc_encoder.sv \
            ../../src/encoder/dbp_dbx_enc.sv \
-           ../../src/encoder/dbp_to_dbx_buf.sv \
            ../../src/encoder/dbx_compressor.sv \
            ../../src/encoder/ebpc_encoder.sv \
            ../../src/encoder/seq_coder.sv \
            ../../src/encoder/shift_streamer.sv \
            ../../src/encoder/zrle.sv \
+           ../../src/encoder/bpc_buffer.sv \
            ../../src/fifo_slice.sv \
            ../../src/clk_gate.sv \
            ../hs_intf.sv \
@@ -31,5 +31,5 @@ SV_SOURCES="../../src/ebpc_pkg.sv \
 #${CADENCE_IUS} ${XRUN_OPTIONS} ${XRUN_GUI_OPTIONS} ${SV_SOURCES}
 
 ${QUESTA_VLOG} ${SV_SOURCES}
-echo -e "-------GUI SIMULATION COMMAND------\n${QUESTA_VSIM} ${QUESTA_OPTIONS} +acc -debugdb -classdebug ${TOP}"
+echo -e "-------GUI SIMULATION COMMAND------\n${QUESTA_VSIM} ${QUESTA_OPTIONS} +acc -debugdb -classdebug ${TOP} &"
 echo -e "------BATCH SIMULATION COMMAND-----\n${QUESTA_VSIM} ${QUESTA_OPTIONS} ${QUESTA_BATCH_OPTIONS} ${TOP}"

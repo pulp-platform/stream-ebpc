@@ -20,7 +20,7 @@ import numpy as np
 import random
 import torchvision
 
-import pydevd_pycharm
+#import pydevd_pycharm
 #pydevd_pycharm.settrace('risa', port=9100, stdoutToServer=True, stderrToServer=True)
 
 random.seed(38)
@@ -72,26 +72,26 @@ def random_inputs(dut):
     if sb.report():
         raise TestFailure("Scoreboard reported problems - check log!")
 
-# @cocotb.test()
-# def fmap_inputs(dut):
-#     drv = EBPCEncoderDriver(dut, TA, TT)
-#     sb = EBPCEncoderScoreboard(dut, BLOCK_SIZE, DATA_W, MAX_ZRLE_LEN)
-#     mon = EBPCEncoderMonitor(dut, sb, TA, TT)
-#     inputs, bpc_len, znz_len = sb.gen_fmap_stimuli(model=MODEL, dataset_path=IMAGE_LOCATION, num_batches=NUM_BATCHES, batch_size=BATCHSIZE, fmap_frac=FMAP_FRAC)
-#     print('Compression Ratio: {}'.format((bpc_len+znz_len)/len(inputs)))
-#     drv.apply_defaults()
-#     cocotb.fork(Clock(dut.clk_i, CLOCK_PERIOD).start())
-#     yield reset_dut(dut.rst_ni, RESET_TIME)
-#     dut._log.info("Reset Done!")
-#     yield wait_cycles(dut.clk_i, 4)
-#     mon.start()
-#     bpc_read_task = cocotb.fork(drv.read_bpc_outputs(len(inputs)*2, tmin=0, tmax=0))
-#     znz_read_task = cocotb.fork(drv.read_znz_outputs(len(inputs)*2, tmin=0, tmax=0))
-#     cocotb.fork(drv.drive_input(inputs, tmin=0, tmax=0))
-#     yield mon.wait_done()
-#     bpc_read_task.kill()
-#     znz_read_task.kill()
-#     mon.stop()
-#     yield wait_cycles(dut.clk_i, 4)
-#     if sb.report():
-#         raise TestFailure("Scoreboard reported problems - check log!")
+@cocotb.test()
+def fmap_inputs(dut):
+    drv = EBPCEncoderDriver(dut, TA, TT)
+    sb = EBPCEncoderScoreboard(dut, BLOCK_SIZE, DATA_W, MAX_ZRLE_LEN)
+    mon = EBPCEncoderMonitor(dut, sb, TA, TT)
+    inputs, bpc_len, znz_len = sb.gen_fmap_stimuli(model=MODEL, dataset_path=IMAGE_LOCATION, num_batches=NUM_BATCHES, batch_size=BATCHSIZE, fmap_frac=FMAP_FRAC)
+    print('Compression Ratio: {}'.format((bpc_len+znz_len)/len(inputs)))
+    drv.apply_defaults()
+    cocotb.fork(Clock(dut.clk_i, CLOCK_PERIOD).start())
+    yield reset_dut(dut.rst_ni, RESET_TIME)
+    dut._log.info("Reset Done!")
+    yield wait_cycles(dut.clk_i, 4)
+    mon.start()
+    bpc_read_task = cocotb.fork(drv.read_bpc_outputs(len(inputs)*2, tmin=0, tmax=0))
+    znz_read_task = cocotb.fork(drv.read_znz_outputs(len(inputs)*2, tmin=0, tmax=0))
+    cocotb.fork(drv.drive_input(inputs, tmin=0, tmax=0))
+    yield mon.wait_done()
+    bpc_read_task.kill()
+    znz_read_task.kill()
+    mon.stop()
+    yield wait_cycles(dut.clk_i, 4)
+    if sb.report():
+        raise TestFailure("Scoreboard reported problems - check log!")

@@ -19,6 +19,7 @@ module zrle
    input logic               vld_i,
    output logic              rdy_o,
    output logic [DATA_W-1:0] data_o,
+   output logic              last_o,
    output logic              vld_o,
    input logic               rdy_i,
    output logic              idle_o
@@ -40,6 +41,7 @@ module zrle
     rdy_o        = 1'b0;
     vld_o        = 1'b0;
     idle_o       = 1'b0;
+    last_o       = 1'b0;
 
     case (state_q)
       empty : begin
@@ -88,9 +90,9 @@ module zrle
               state_d = flush_zeros;
             else
               state_d                  = flush;
-            end else if (shift_cnt_d >= DATA_W) begin
-              state_d                = full;
-              shift_cnt_d            = shift_cnt_d - DATA_W;
+          end else if (shift_cnt_d >= DATA_W) begin
+            state_d                = full;
+            shift_cnt_d            = shift_cnt_d - DATA_W;
           end
         end // if (vld_i)
       end // case: filling
@@ -141,6 +143,8 @@ module zrle
       end // case: full
       flush : begin
         vld_o = 1'b1;
+        if (shift_cnt_q <= DATA_W)
+          last_o = 1'b1;
         if (rdy_i) begin
           stream_reg_d = {stream_reg_q[DATA_W-1:0], {DATA_W{1'b0}}};
           if (shift_cnt_q > DATA_W)

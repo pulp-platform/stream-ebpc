@@ -2,44 +2,49 @@ onerror {resume}
 quietly WaveActivateNextPane {} 0
 add wave -noupdate /ebpc_encoder_tb/dut_i/clk_i
 add wave -noupdate /ebpc_encoder_tb/dut_i/rst_ni
-add wave -noupdate -group dut_i -radix decimal /ebpc_encoder_tb/dut_i/data_i
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/last_i
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/vld_i
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/rdy_o
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/idle_o
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/znz_data_o
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/znz_vld_o
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/znz_rdy_i
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/bpc_data_o
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/bpc_vld_o
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/bpc_rdy_i
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/data_reg_d
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/data_reg_q
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/last_d
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/last_q
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/flush
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/data_reg_en
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/data_to_bpc
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/vld_to_bpc
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/rdy_from_bpc
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/vld_to_znz
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/rdy_from_znz
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/is_one_to_znz
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/bpc_idle
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/bpc_waiting
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/znz_idle
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/wait_rdy_d
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/wait_rdy_q
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/state_d
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/state_q
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/block_cnt_d
-add wave -noupdate -group dut_i /ebpc_encoder_tb/dut_i/block_cnt_q
+add wave -noupdate -expand -group dut_i -radix decimal /ebpc_encoder_tb/dut_i/data_i
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/last_i
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/vld_i
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/rdy_o
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/idle_o
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/znz_data_o
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/znz_last_o
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/znz_vld_o
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/znz_rdy_i
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/bpc_data_o
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/bpc_last_o
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/bpc_vld_o
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/bpc_rdy_i
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/data_reg_d
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/data_reg_q
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/last_d
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/last_q
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/flush
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/data_reg_en
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/data_to_bpc
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/vld_to_bpc
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/rdy_from_bpc
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/vld_to_znz
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/rdy_from_znz
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/is_one_to_znz
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/bpc_was_last
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/bpc_idle
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/bpc_waiting
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/znz_idle
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/bpc_buf_full
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/wait_rdy_d
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/wait_rdy_q
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/state_d
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/state_q
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/block_cnt_d
+add wave -noupdate -expand -group dut_i /ebpc_encoder_tb/dut_i/block_cnt_q
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/clk_i
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/data_i
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/flush_i
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/vld_i
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/rdy_o
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/data_o
+add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/last_o
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/vld_o
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/rdy_i
 add wave -noupdate -group bpc_encoder /ebpc_encoder_tb/dut_i/bpc_encoder_i/idle_o
@@ -77,6 +82,7 @@ add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_cod
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/vld_i
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/rdy_o
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/data_o
+add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/last_o
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/vld_o
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/rdy_i
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/idle_o
@@ -99,26 +105,41 @@ add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_cod
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/shift_vld
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/shift_rdy
 add wave -noupdate -group seq_coder /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_idle
-add wave -noupdate -group streamer -radix binary /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/data_i
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/shift_i
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/flush_i
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/vld_i
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/rdy_o
-add wave -noupdate -group streamer -radix binary /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/data_o
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/vld_o
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/rdy_i
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/idle_o
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/stream_reg_d
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/stream_reg_q
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/shift_cnt_d
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/shift_cnt_q
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/st_d
-add wave -noupdate -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/st_q
+add wave -noupdate -expand -group streamer -radix binary /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/data_i
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/shift_i
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/flush_i
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/vld_i
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/rdy_o
+add wave -noupdate -expand -group streamer -radix binary /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/data_o
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/last_o
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/vld_o
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/rdy_i
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/idle_o
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/stream_reg_d
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/stream_reg_q
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/shift_cnt_d
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/shift_cnt_q
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/st_d
+add wave -noupdate -expand -group streamer /ebpc_encoder_tb/dut_i/bpc_encoder_i/seq_coder_i/streamer_i/st_q
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/data_i
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/last_i
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/vld_i
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/rdy_o
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/was_last_i
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/data_o
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/last_o
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/vld_o
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/rdy_i
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/full_o
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/state_d
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/state_q
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/data_d
+add wave -noupdate -expand -group {BPC Buffer} /ebpc_encoder_tb/dut_i/bpc_buf_i/data_q
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {3359629288 ps} 0}
+WaveRestoreCursors {{Cursor 1} {22818140 ps} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 360
-configure wave -valuecolwidth 510
+configure wave -valuecolwidth 168
 configure wave -justifyvalue left
 configure wave -signalnamewidth 1
 configure wave -snapdistance 10
@@ -131,4 +152,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ps} {9641258877 ps}
+WaveRestoreZoom {22811305 ps} {22836208 ps}

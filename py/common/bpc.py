@@ -277,11 +277,13 @@ def BPC(values, chunkSize=32, variant='baseline', wordwidth=None, dbg_fn=None):
     k += 1
   return strm
 
-def BPC_words(values, block_size=8, variant='paper', word_w=8, dbg_fn=None):
+def BPC_words(values, block_size=8, variant='paper', word_w=8, dbg_fn=None, return_mod_len=False):
   bpc_strm = BPC(values, block_size, variant, word_w, dbg_fn)
   bpc_strm_padded = zero_pad_bitstr(bpc_strm, word_w)
-  return split_str(bpc_strm_padded, word_w)
-
+  if return_mod_len:
+    return split_str(bpc_strm_padded, word_w), len(bpc_strm)%(word_w)
+  else:
+    return split_str(bpc_strm_padded, word_w)
 
 
 ##############################

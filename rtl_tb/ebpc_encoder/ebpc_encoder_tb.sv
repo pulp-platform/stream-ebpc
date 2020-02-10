@@ -62,14 +62,13 @@ module ebpc_encoder_tb;
                  .TT(TT),
                  .MIN_WAIT(MIN_OUT_WAIT_CYCLES),
                  .MAX_WAIT(MAX_OUT_WAIT_CYCLES),
-                 .HAS_LAST(1'b0),
+                 .HAS_LAST(1'b1),
                  .NAME("ZNZ Output")
                  )
   znz_drv;
 
  initial begin
    bpc_if.last = 1'b0;
-   znz_if.last = 1'b0;
    in_drv      = new(in_if);
    in_drv.reset_out();
    bpc_drv = new(bpc_if);
@@ -95,7 +94,7 @@ module ebpc_encoder_tb;
     (
      .clk_o(clk),
      .rst_no(rst_n)
-     );                         
+     );
 
   ebpc_encoder dut_i (
                       .clk_i(clk),
@@ -105,6 +104,7 @@ module ebpc_encoder_tb;
                       .vld_i(in_if.vld),
                       .rdy_o(in_if.rdy),
                       .znz_data_o(znz_if.data),
+                      .znz_last_o(znz_if.last),
                       .znz_vld_o(znz_if.vld),
                       .znz_rdy_i(znz_if.rdy),
                       .bpc_data_o(bpc_if.data),
