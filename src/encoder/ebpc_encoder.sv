@@ -211,7 +211,7 @@ module ebpc_encoder
   end // block: sequential
 
 
-  clk_gate
+  pulp_clock_gating
     bpc_clk_gate_i (
                     .clk_i(clk_i),
                     .en_i(vld_to_bpc || bpc_vld_o || (!bpc_waiting && !bpc_idle) || state_q == flush_st),
