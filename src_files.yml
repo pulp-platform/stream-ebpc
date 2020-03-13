@@ -1,4 +1,17 @@
-stream-ebpc:
+ebpc_encoder:
+  files: [
+  src/ebpc_pkg.sv
+  src/fifo_slice.sv
+  src/encoder/bpc_buffer.sv
+  src/encoder/bpc_encoder.sv
+  src/encoder/dbx_compressor.sv
+  src/encoder/ebpc_encoder.sv
+  src/encoder/seq_coder.sv
+  src/encoder/shift_streamer.sv
+  src/encoder/zrle.sv
+  ]
+
+ebpc_decoder:
   files: [
   src/ebpc_pkg.sv
   src/fifo_slice.sv
@@ -9,11 +22,4 @@ stream-ebpc:
   src/decoder/symbol_decoder.sv
   src/decoder/unpacker.sv
   src/decoder/zrle_decoder.sv
-  src/encoder/bpc_buffer.sv
-  src/encoder/bpc_encoder.sv
-  src/encoder/dbx_compressor.sv
-  src/encoder/ebpc_encoder.sv
-  src/encoder/seq_coder.sv
-  src/encoder/shift_streamer.sv
-  src/encoder/zrle.sv
   ]
