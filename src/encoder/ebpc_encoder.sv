@@ -128,7 +128,7 @@ module ebpc_encoder
               // 2. we tell it the value it is holding is the last one
               // 3. it gets a new value
               if (bpc_idle) begin
-                assert (bpc_buf_full) else $warning("Assertion fail in EBPC Encoder: BPC is idle, but BPC buffer not full in running state!");
+                assert (bpc_buf_full) else $warning("Assertion fail in EBPC Encoder: BPC is idle, but BPC buffer not full in running state! Are you compressing all zeros?");
                 bpc_was_last = 1'b1;
                 state_d = idle;
               end else begin
