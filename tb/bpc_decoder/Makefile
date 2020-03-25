@@ -14,7 +14,7 @@ WPWD=$(shell sh -c 'pwd -W')
 PWD=$(shell pwd)
 SRC_DIR = $(PWD)/../../src
 DEC_SRC_DIR = $(SRC_DIR)/decoder
-SIM_ARGS = -t 1ps -do ../sim.do -debugdb
+SIM_ARGS = -t 1ps -do sim.do -debugdb
 
 
 #PYTHONPATH := $(PWD)/../pydevd-pycharm.egg:$(PYTHONPATH)

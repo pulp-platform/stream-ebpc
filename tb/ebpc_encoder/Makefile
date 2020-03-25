@@ -15,7 +15,7 @@ SRC_DIR = $(PWD)/../../src
 ENC_SRC_DIR = $(SRC_DIR)/encoder
 ifeq ($(SIM),questa)
 	RUN_ARGS = '-noautoldlibpath'
-	SIM_ARGS = "-t 1ps -do '../sim.do' -debugdb -noautoldlibpath"
+	SIM_ARGS = "-t 1ps -do 'sim.do' -debugdb -noautoldlibpath"
 endif
 
 

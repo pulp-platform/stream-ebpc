@@ -14,7 +14,7 @@ WPWD=$(shell sh -c 'pwd -W')
 PWD=$(shell pwd)
 SRC_DIR = $(PWD)/../../src
 ENC_SRC_DIR = $(SRC_DIR)/encoder
-SIM_ARGS = "-t 1ps -do '../sim.do'"
+SIM_ARGS = "-t 1ps -do 'sim.do'"
 
 
 #PYTHONPATH := $(PWD)/../pydevd-pycharm.egg:$(PYTHONPATH)

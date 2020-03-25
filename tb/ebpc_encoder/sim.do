@@ -1,2 +1,2 @@
-do ../ebpc_wave.do
+do ebpc_wave.do
 run -all

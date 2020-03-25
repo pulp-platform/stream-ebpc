@@ -1,2 +1,2 @@
-do ../wave.do
+do wave.do
 run -all
