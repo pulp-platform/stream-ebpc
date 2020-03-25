@@ -46,7 +46,7 @@ module delta_reverse
 
     case (state_q)
       base : begin
-        assert(diff_idx_q == 0) else $display("Assertion failed @ time %t in delta_reverse: diff_idx_q not 0 in idle state!", $time);
+        assert(diff_idx_q == 0) else $warning("Assertion failed in delta_reverse: diff_idx_q not 0 in idle state!");
         diff_idx_d = 'd0;
         data_o    = data_i.base;
         if (vld_i) begin
@@ -59,7 +59,7 @@ module delta_reverse
         end
       end
       stream : begin
-        assert (vld_i == 1'b1) else $display("Assertion failed @ time %t in delta_reverse: rdy_i not 1 in stream state!", $time);
+        assert (vld_i == 1'b1) else $warning("Assertion failed in delta_reverse: rdy_i not 1 in stream state!");
         vld_o = 1'b1;
         if (rdy_i) begin
           acc_reg_d      = acc_reg_q + diffs[diff_idx_q];

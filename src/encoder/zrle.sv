@@ -45,9 +45,9 @@ module zrle
 
     case (state_q)
       empty : begin
-        assert (stream_reg_q == 'd0) else $display("Assertion failed @ time %t in zrle: stream_reg not empty in empty state", $time);
-        assert (shift_cnt_q == 'd0) else $display("Assertion failed @ time %t in zrle: shift_cnt not 0 in empty state", $time);
-        assert (zero_cnt_q == 'd0) else $display("Assertion failed @ time %t in zrle: zero_cnt not 0 in empty state", $time);
+        assert (stream_reg_q == 'd0) else $warning("Assertion failed in zrle: stream_reg not empty in empty state");
+        assert (shift_cnt_q == 'd0) else $warning("Assertion failed in zrle: shift_cnt not 0 in empty state");
+        assert (zero_cnt_q == 'd0) else $warning("Assertion failed in zrle: zero_cnt not 0 in empty state");
         rdy_o = 1'b1;
         idle_o = 1'b1;
         if (vld_i) begin
@@ -97,7 +97,7 @@ module zrle
         end // if (vld_i)
       end // case: filling
       flush_zeros : begin
-        assert (zero_cnt_q != 0) else $display("Assertion failed in ZRLE @ time %t: zero_cnt == 0 in flush_zeros!", $time);
+        assert (zero_cnt_q != 0) else $warning("Assertion failed in ZRLE: zero_cnt == 0 in flush_zeros!");
         zero_cnt_d = 'd0;
         stream_reg_d     = stream_reg_q
                            | ({1'b0, LOG_MAX_ZRLE_LEN'(zero_cnt_q-1), {2*DATA_W-LOG_MAX_ZRLE_LEN-1{1'b0}}}
@@ -106,8 +106,8 @@ module zrle
         state_d = flush;
       end
       full : begin
-        assert (shift_cnt_q < DATA_W) else $display("Assertion failed in zrle: shift_cnt >= DATA_W in full state");
-        assert (zero_cnt_q == 0) else $display("Assertion failed in zrle: zero_cnt is not 0 in full state (should it really?)");
+        assert (shift_cnt_q < DATA_W) else $warning("Assertion failed in zrle: shift_cnt >= DATA_W in full state");
+        assert (zero_cnt_q == 0) else $warning("Assertion failed in zrle: zero_cnt is not 0 in full state (should it really?)");
         vld_o = 1'b1;
         if (rdy_i) begin
           rdy_o        = 1'b1;

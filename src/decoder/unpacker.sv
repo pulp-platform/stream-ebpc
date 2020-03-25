@@ -43,8 +43,8 @@ module unpacker
     state_d = state_q;
     case (state_q)
       idle: begin
-        assert(fill_state_q == 'd0) else $display("Assertion failed in unpacker at time %t: fill_state_q not 0 in idle state", $time);
-        assert(stream_reg_q == 'd0) else $display("Assertion failed in unpacker at time %t: stream_reg_q not 0 in idle state", $time);
+        assert(fill_state_q == 'd0) else $warning("Assertion failed in unpacker: fill_state_q not 0 in idle state");
+        assert(stream_reg_q == 'd0) else $warning("Assertion failed in unpacker: stream_reg_q not 0 in idle state");
         rdy_o     = 1'b1;
         if (vld_i) begin
           // the first word will be a base word

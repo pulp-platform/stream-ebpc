@@ -78,7 +78,7 @@ module symbol_decoder
         end
       end
       dbx_decode : begin
-        assert (rdy_i) else $display("Assertion failed @ time %t in symbol_decoder - rdy_i not high in dbx_decode state!", $time);
+        assert (rdy_i) else $warning("Assertion failed in symbol_decoder - rdy_i not high in dbx_decode state!", $time);
         if (unpacker_fill_state_i >= get_shift(expander_len)) begin
           data_rdy_o = 1'b1;
           if (data_vld_i) begin
@@ -90,7 +90,7 @@ module symbol_decoder
             end else
               dbp_reg_d   = expander_out ^ dbp_reg_q;
             if (|expander_zeros) begin
-              assert(dbx_cnt_q != DATA_W) else $display("Assertion failed @ time %t in symbol_decoder - dbx_cnt is DATA_W and expander_zeros !=0 in dbx_decode state!", $time);
+              assert(dbx_cnt_q != DATA_W) else $warning("Assertion failed in symbol_decoder - dbx_cnt is DATA_W and expander_zeros !=0 in dbx_decode state!", $time);
               zero_cnt_d  = expander_zeros - 1;
               state_d     = zeros;
               data_rdy_o  = 1'b0;
@@ -108,8 +108,8 @@ module symbol_decoder
       zeros : begin
         push_o    = 1'b1;
         dbx_cnt_d = dbx_cnt_q + 1;
-        assert (data_vld_i) else $display("Assertion failed @ time %t in symbol_decoder - data_vld_i not 1 in zeros state!", $time);
-        assert (rdy_i) else $display("Assertion failed @ time %t in symbol_decoder - rdy_i not high in zeros state!", $time);
+        assert (data_vld_i) else $warning("Assertion failed in symbol_decoder - data_vld_i not 1 in zeros state!", $time);
+        assert (rdy_i) else $warning("Assertion failed in symbol_decoder - rdy_i not high in zeros state!", $time);
         if (zero_cnt_q == 'd0) begin
           data_rdy_o    = 1'b1;
           if (dbx_cnt_q == DATA_W) begin
@@ -121,7 +121,7 @@ module symbol_decoder
           end else
             state_d = dbx_decode;
         end else begin // case: zeros
-          assert(dbx_cnt_q != DATA_W) else $display("Assertion failed @ time %t in symbol_decoder - dbx_cnt is DATA_W and zero_cnt !=0 ! in zeros state", $time);
+          assert(dbx_cnt_q != DATA_W) else $warning("Assertion failed in symbol_decoder - dbx_cnt is DATA_W and zero_cnt !=0 ! in zeros state");
           zero_cnt_d = zero_cnt_q-1;
         end // else: !if(zero_cnt_q == 'd0)
       end // case: zeros

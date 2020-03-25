@@ -48,7 +48,7 @@ module zrle_decoder
       end
       full : begin
         vld_o = 1'b1;
-        assert(zero_cnt_q == 'd0) else $display("Assertion failed in zrle_decoder @ time %t: zero_cnt_q not 0 in full state", $time);
+        assert(zero_cnt_q == 'd0) else $warning("Assertion failed in zrle_decoder: zero_cnt_q not 0 in full state");
         if (rdy_i) begin
           if (~stream_reg_q[2*DATA_W-1]) begin
             stream_reg_d = (stream_reg_q << 1+LOG_MAX_ZRLE_LEN);
@@ -83,7 +83,7 @@ module zrle_decoder
       end // case: full
       filling : begin
         rdy_o = 1'b1;
-        assert(zero_cnt_q == 'd0) else $display("Assertion failed in zrle_decoder @ time %t: zero_cnt_q not 0 in full state", $time);
+        assert(zero_cnt_q == 'd0) else $warning("Assertion failed in zrle_decoder: zero_cnt_q not 0 in full state");
         if (vld_i) begin
           stream_reg_d = stream_reg_q | ({znz_i, {DATA_W{1'b0}}} >> fill_state_q);
           fill_state_d = fill_state_q + DATA_W;
@@ -93,7 +93,7 @@ module zrle_decoder
           vld_o = 1'b1;
           if (rdy_i) begin
             if (flush_i) begin
-              assert (stream_reg_q[2*DATA_W-1] || (stream_reg_q[2*DATA_W-2:2*DATA_W-LOG_MAX_ZRLE_LEN-1]=='d0)) else $display("Assertion failed in zrle_decoder @ time %t: stream_reg_q's uppermost bit is zero but the runlength is not zero in state filling when flush is high!", $time);
+              assert (stream_reg_q[2*DATA_W-1] || (stream_reg_q[2*DATA_W-2:2*DATA_W-LOG_MAX_ZRLE_LEN-1]=='d0)) else $warning("Assertion failed in zrle_decoder: stream_reg_q's uppermost bit is zero but the runlength is not zero in state filling when flush is high!");
               rdy_o = 1'b0;
               stream_reg_d = 'd0;
               state_d      = empty;
@@ -120,7 +120,7 @@ module zrle_decoder
         vld_o = 1'b1;
         if (rdy_i) begin
           if (flush_i) begin
-            assert (zero_cnt_q == 'd0) else $display("Assertion failed in zrle_decoder @ time %t: zero_cnt_q not 0 in zeros state when flush is high - likely encoding problem!", $time);
+            assert (zero_cnt_q == 'd0) else $warning("Assertion failed in zrle_decoder: zero_cnt_q not 0 in zeros state when flush is high - likely encoding problem!");
             zero_cnt_d   = 'd0;
             state_d      = empty;
             stream_reg_d = 'd0;

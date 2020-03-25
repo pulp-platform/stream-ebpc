@@ -64,7 +64,7 @@ module dbp_dbx_enc
 
     case (state_q)
       idle: begin
-        assert (fill_cnt_q==BLOCK_SIZE-1) else $display("Assertion fail @ time %t: fill_cnt_q is not BLOCK_SIZE-1 in idle state!", $time);
+        assert (fill_cnt_q==BLOCK_SIZE-1) else $warning("Assertion fail: fill_cnt_q is not BLOCK_SIZE-1 in idle state!");
         fill_cnt_d         = BLOCK_SIZE-1;
         rdy_o              = 1'b1;
         last_item_d        = 'd0;

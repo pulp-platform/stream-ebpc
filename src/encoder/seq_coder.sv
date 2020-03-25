@@ -83,8 +83,8 @@ module seq_coder
 
     case (state_q)
       idle: begin
-        assert (zero_cnt_q == 0) else $display("Assertion failed in seq_coder @ time %t: zero_cnt_q not 0 in state idle", $time);
-        assert (dbx_cnt_q == DATA_W) else $display("Assertion failed in seq_coder @ time %t: dbx_cnt_q not DATA_W in state idle", $time);
+        assert (zero_cnt_q == 0) else $warning("Assertion failed in seq_coder: zero_cnt_q not 0 in state idle");
+        assert (dbx_cnt_q == DATA_W) else $warning("Assertion failed in seq_coder: dbx_cnt_q not DATA_W in state idle");
         zero_cnt_d = 'd0;
         dbx_cnt_d  = DATA_W;
         idle_o     = streamer_idle;
@@ -100,7 +100,7 @@ module seq_coder
         end
       end
       fill: begin
-        assert (vld_from_slice == 1'b1) else $display("Assertion failed in seq_coder @ time %t: vld_from_slice is not high in state 'fill'!", $time);
+        assert (vld_from_slice == 1'b1) else $warning("Assertion failed in seq_coder: vld_from_slice is not high in state 'fill'!");
         //if (code_symb.len == N)
         shift_vld       = 1'b1;
         if (code_symb.zero) begin

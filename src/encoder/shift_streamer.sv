@@ -44,15 +44,15 @@ always_comb begin : fsm
   rdy_o        = 1'b0;
   vld_o        = 1'b0;
   idle_o       = 1'b0;
-  assert (stream_reg_q[0] == 0) else $display("Assertion failed: Last bit of stream_reg_q should always be 0 but is 1!");
-  assert (shift_i <= DATA_W) else $display("Assertion failed: invalid shift_i in shift_streamer (can't be larger than DATA_W)");
+  assert (stream_reg_q[0] == 0) else $warning("Assertion failed: Last bit of stream_reg_q should always be 0 but is 1!");
+  assert (shift_i <= DATA_W) else $warning("Assertion failed: invalid shift_i in shift_streamer (can't be larger than DATA_W)");
   case (st_q)
     empty: begin
       shift_cnt_d = 'd0;
       rdy_o       = 1'b1;
       idle_o      = 1'b1;
-      assert (shift_cnt_q == 'd0) else $display("ASSERTION FAILED @ time %t: shift_cnt_q is not 0 in shifter empty state!", $time);
-      assert (stream_reg_q == 'd0) else $display("ASSERTION FAILED @ time %t: stream_reg_q is not 0 in shifter empty state!", $time);
+      assert (shift_cnt_q == 'd0) else $warning("ASSERTION FAILED: shift_cnt_q is not 0 in shifter empty state!");
+      assert (stream_reg_q == 'd0) else $warning("ASSERTION FAILED: stream_reg_q is not 0 in shifter empty state!");
       if (vld_i) begin
         idle_o       = 1'b0;
         stream_reg_d = stream_reg_q | (data_i>>shift_cnt_q);
@@ -100,7 +100,7 @@ always_comb begin : fsm
       end // if (rdy_i)
     end // case: full
     flush: begin
-      assert(shift_cnt_q >0) else $display("Assertion failed in shift_streamer @ time %t - shift_cnt is 0 in flush state!", $time);
+      assert(shift_cnt_q >0) else $warning("Assertion failed in shift_streamer - shift_cnt is 0 in flush state!");
       vld_o = 1'b1;
       last_o = 1'b1;
       if (rdy_i) begin
