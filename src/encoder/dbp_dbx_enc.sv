@@ -69,6 +69,11 @@ module dbp_dbx_enc
         rdy_o              = 1'b1;
         last_item_d        = 'd0;
         idle_o             = 1'b1;
+        // the flush signal propagates through the processing chain. Whenever an
+        // upstream module is idle, it propagates the flush, such that the flush
+        // arrives at the final shift_streamer only when all the upstream
+        // modules are finished. Note that the BPC encoder MUST always be fed
+        // complete blocks, but this is ensured by the EBPC Encoder top-level module.
         flush_o            = flush_i;
         waiting_for_data_o = 1'b1;
         if (vld_i) begin

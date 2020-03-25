@@ -175,6 +175,12 @@ module ebpc_encoder
       flush_st : begin
         data_to_bpc = 'd0;
         if (block_cnt_q > 0) begin
+          // this part is needed to deal with data streams that have a number of
+          // non-zero elements that is not a multiple of BLOCK_SIZE. In this case,
+          // we feed the BPC encoder enough zero values to fill up a started
+          // block. No ZNZ values are generated for these bogus values, as they
+          // will be stripped out by the EBPC Decoder. Nevertheless, they must
+          // be accounted for when counting the number of BPC words!
           vld_to_bpc = 1'b1;
           if (rdy_from_bpc)
             incr_block_cnt = 1'b1;
