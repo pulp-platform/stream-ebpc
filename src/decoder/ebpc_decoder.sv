@@ -100,6 +100,7 @@ module ebpc_decoder
             if (vld_from_bpc && rdy_i) begin
               if (word_cnt_q == 'd0) begin
                 flush_to_zrld   = 1'b1;
+                clr_to_bpc      = 1'b1;
                 state_d         = idle;
                 block_znz_inp_d = 1'b0;
                 block_bpc_inp_d = 1'b0;
