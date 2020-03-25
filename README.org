@@ -176,8 +176,14 @@ The code to reproduce the non-hardware experimental results is available at http
     1. Tell the block number of words to expect in the decoded transmission:
        ~num_words_i~, ~num_words_vld_i~, ~num_words_rdy_o~.
     2. Stream in the encoded words:
-       - *ZNZ Stream*: ~znz_i~, ~znz_vld_i~, ~znz_rdy_o~.
-       - *BPC Stream*: ~bpc_i~, ~bpc_vld_i~, ~bpc_rdy_o~.
+       - *ZNZ Stream*: ~znz_i~, ~znz_last_i~, ~znz_vld_i~, ~znz_rdy_o~.
+       - *BPC Stream*: ~bpc_i~, ~bpc_last_i~, ~bpc_vld_i~, ~bpc_rdy_o~.
+       
+       Use of the ~znz_last_i~ and ~bpc_last_i~ signals is optional, provided
+       that the next data stream is not started before its ~num_words_i~
+       handshake has been completed. *In situations where the data streams and
+       the ~num_words_i~ handshake are decoupled, they must be used.* Otherwise,
+       they may be tied to zero.
     3. In parallel, read the decoded output stream:
        ~data_o~, ~vld_o~, ~rdy_i~, ~last_o~.
        ~last_o~ will be asserted on the last output word. The next transmission

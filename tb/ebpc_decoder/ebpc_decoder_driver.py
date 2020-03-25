@@ -19,9 +19,11 @@ class EBPCDecoderDriver:
         self.rst_ni = dut.rst_ni
         self.bpc_i = dut.bpc_i
         self.bpc_vld_i = dut.bpc_vld_i
+        self.bpc_last_i = dut.bpc_last_i
         self.bpc_rdy_o = dut.bpc_rdy_o
         self.znz_i = dut.znz_i
         self.znz_vld_i = dut.znz_vld_i
+        self.znz_last_i = dut.znz_last_i
         self.znz_rdy_o = dut.znz_rdy_o
         self.data_o = dut.data_o
         self.last_o = dut.last_o
@@ -33,41 +35,45 @@ class EBPCDecoderDriver:
         self.dut = dut
         self.ta = ta
         self.tt = tt
-        self.bpc_i_drv = HandshakeInputDriver(clk=self.clk_i, signals=[self.bpc_i], vld=self.bpc_vld_i,
+        self.bpc_i_drv = HandshakeInputDriver(clk=self.clk_i, signals=[self.bpc_i, self.bpc_last_i], vld=self.bpc_vld_i,
                                               rdy=self.bpc_rdy_o, ta=self.ta, tt=self.tt)
         self.num_words_drv = HandshakeInputDriver(clk=self.clk_i, signals=[self.num_words_i], vld=self.num_words_vld_i,
                                               rdy=self.num_words_rdy_o, ta=self.ta, tt=self.tt)
-        self.znz_i_drv = HandshakeInputDriver(clk=self.clk_i, signals=[self.znz_i], vld=self.znz_vld_i, rdy=self.znz_rdy_o, ta=self.ta, tt=self.tt)
+        self.znz_i_drv = HandshakeInputDriver(clk=self.clk_i, signals=[self.znz_i, self.znz_last_i], vld=self.znz_vld_i, rdy=self.znz_rdy_o, ta=self.ta, tt=self.tt)
         self.out_drv = HandshakeOutputDriver(clk=self.clk_i, vld=self.vld_o, rdy=self.rdy_i, ta=self.ta, tt=self.tt)
 
     def apply_defaults(self):
         self.bpc_i <= 0
         self.bpc_vld_i <= 0
+        self.bpc_last_i <= 0
         self.znz_i <= 0
         self.znz_vld_i <= 0
+        self.znz_last_i <= 0
         self.num_words_i <= 0
         self.num_words_vld_i <= 0
         self.rdy_i <= 0
 
     @cocotb.coroutine
-    def drive_bpc(self, values, tmin, tmax):
+    def drive_bpc(self, values, last, tmin, tmax):
         # values: list of values to feed
+        # last:   list of 'last' bits to feed
         # tmin:   minimum # of clock cycles to wait between input applications
         # tmax:   maximum # of clock cycles to wait between applications
         assert self.rst_ni.value == 1, "BPCDecoderDriver Error: rst_ni is not high in drive_bpc!"
-        for val in values:
+        for inp in zip(values, last):
             yield wait_cycles(self.clk_i, random.randint(tmin,tmax))
-            yield self.bpc_i_drv.write_input(val)
+            yield self.bpc_i_drv.write_input(inp)
 
     @cocotb.coroutine
-    def drive_znz(self, values, tmin, tmax):
+    def drive_znz(self, values, last, tmin, tmax):
         # values: list of values to feed
+        # last:   list of 'last' bits to feed
         # tmin:   minimum # of clock cycles to wait between input applications
         # tmax:   maximum # of clock cycles to wait between applications
         assert self.rst_ni.value == 1, "BPCDecoderDriver Error: rst_ni is not high in drive_znz!"
-        for val in values:
+        for inp in zip(values, last):
             yield wait_cycles(self.clk_i, random.randint(tmin,tmax))
-            yield self.znz_i_drv.write_input(val)
+            yield self.znz_i_drv.write_input(inp)
 
     @cocotb.coroutine
     def write_num_words(self, n, tmin, tmax):

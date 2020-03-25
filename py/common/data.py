@@ -169,7 +169,7 @@ def genStimFiles(file_prefixes, data_w, *args, modules=['encoder', 'decoder'], m
         write_stats(file_prefixes['encoder']+'_stats.log', stat_dict)
     if 'decoder' in modules:
         write_sim_file(data=zip([nw_bin]), filename=file_prefixes['decoder']+'_num_words_input.stim', length=1)
-        write_sim_file(zip(bpc_vals), file_prefixes['decoder']+'_bpc_input.stim', len(bpc_vals))
-        write_sim_file(zip(znz_vals), file_prefixes['decoder']+'_znz_input.stim', len(znz_vals))
+        write_sim_file(zip(bpc_vals, bpc_last), file_prefixes['decoder']+'_bpc_input.stim', len(bpc_vals))
+        write_sim_file(zip(znz_vals, znz_last), file_prefixes['decoder']+'_znz_input.stim', len(znz_vals))
         write_sim_file(zip(fms_bin, last_bin), file_prefixes['decoder']+'_data_output.expresp', len(fms_q))
         write_stats(file_prefixes['decoder']+'_stats.log', stat_dict)

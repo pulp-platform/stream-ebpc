@@ -32,23 +32,50 @@ BLOCK_SIZE = 8
 MAX_ZRLE_LEN = 16
 TA = 200
 TT = 2000
-NUM_WORDS = 600001
+NUM_WORDS = 60001
 
 @cocotb.test()
-def random_inputs(dut):
+def random_inputs_without_last(dut):
 
     drv = EBPCDecoderDriver(dut, TA, TT)
     sb = EBPCDecoderScoreboard(dut, BLOCK_SIZE, DATA_W, MAX_ZRLE_LEN)
     mon = EBPCDecoderMonitor(dut, sb)
     bpc_in, znz_in = sb.gen_rand_stimuli(NUM_WORDS, 10, 0.2)
+    bpc_last_in = [0]*len(bpc_in)
+    znz_last_in = [0]*len(znz_in)
     drv.apply_defaults()
     cocotb.fork(Clock(dut.clk_i, CLOCK_PERIOD).start())
     yield reset_dut(dut.rst_ni, RESET_TIME)
     yield wait_cycles(dut.clk_i, 4)
     mon.start()
     num_words_feed_task = cocotb.fork(drv.write_num_words(NUM_WORDS-1, 0, 50))
-    bpc_feed_task = cocotb.fork(drv.drive_bpc(bpc_in, 0, 0))
-    znz_feed_task = cocotb.fork(drv.drive_znz(znz_in, 0, 0))
+    bpc_feed_task = cocotb.fork(drv.drive_bpc(bpc_in, bpc_last_in, 0, 0))
+    znz_feed_task = cocotb.fork(drv.drive_znz(znz_in, znz_last_in, 0, 0))
+    yield drv.read_outputs(100000000, 0, 0)
+    bpc_feed_task.kill()
+    znz_feed_task.kill()
+    num_words_feed_task.kill()
+    mon.stop()
+    if sb.report():
+        raise TestFailure("Scoreboard reported problems - check log!")
+
+@cocotb.test()
+def random_inputs_with_last(dut):
+
+    drv = EBPCDecoderDriver(dut, TA, TT)
+    sb = EBPCDecoderScoreboard(dut, BLOCK_SIZE, DATA_W, MAX_ZRLE_LEN)
+    mon = EBPCDecoderMonitor(dut, sb)
+    bpc_in, znz_in = sb.gen_rand_stimuli(NUM_WORDS, 10, 0.2)
+    bpc_last_in = [0]*(len(bpc_in)-1) + [1]
+    znz_last_in = [0]*(len(znz_in)-1) + [1]
+    drv.apply_defaults()
+    cocotb.fork(Clock(dut.clk_i, CLOCK_PERIOD).start())
+    yield reset_dut(dut.rst_ni, RESET_TIME)
+    yield wait_cycles(dut.clk_i, 4)
+    mon.start()
+    num_words_feed_task = cocotb.fork(drv.write_num_words(NUM_WORDS-1, 0, 50))
+    bpc_feed_task = cocotb.fork(drv.drive_bpc(bpc_in, bpc_last_in, 0, 0))
+    znz_feed_task = cocotb.fork(drv.drive_znz(znz_in, znz_last_in, 0, 0))
     yield drv.read_outputs(100000000, 0, 0)
     bpc_feed_task.kill()
     znz_feed_task.kill()

@@ -8,11 +8,12 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 
+`timescale 1ps/1fs
 
 module ebpc_decoder_tb;
   import hs_drv_pkg::*;
   import ebpc_pkg::*;
-  
+
   localparam int unsigned DATA_W = 8;
   localparam int unsigned MIN_IN_WAIT_CYCLES = 0;
   localparam int unsigned MAX_IN_WAIT_CYCLES = 0;
@@ -21,11 +22,11 @@ module ebpc_decoder_tb;
 
 
 
-  localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_num_words_input.stim";
-  localparam string       BPC_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_bpc_input.stim";
-  localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_znz_input.stim";
+  localparam string       NUM_WORDS_STIM_FILE = "/home/georgr/projects/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_num_words_input.stim";
+  localparam string       BPC_STIM_FILE = "/home/georgr/projects/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_bpc_input.stim";
+  localparam string       ZNZ_STIM_FILE = "/home/georgr/projects/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_znz_input.stim";
 
-  localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/ebpc-gf22/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_data_output.expresp";
+  localparam string       DATA_EXPVAL_FILE = "/home/georgr/projects/stream-ebpc/simvectors/decoder/resnet34/resnet34_f0.05_bs1_nb4_ww8_data_output.expresp";
 
   localparam time         CLK_PERIOD = 1.8ns;
   localparam time         RST_TIME = 10*CLK_PERIOD;
@@ -65,7 +66,7 @@ module ebpc_decoder_tb;
                  .TT(TT),
                  .MIN_WAIT(MIN_IN_WAIT_CYCLES),
                  .MAX_WAIT(MAX_IN_WAIT_CYCLES),
-                 .HAS_LAST(1'b0),
+                 .HAS_LAST(1'b1),
                  .NAME("BPC Input")
                  )
   bpc_drv;
@@ -76,7 +77,7 @@ module ebpc_decoder_tb;
                  .TT(TT),
                  .MIN_WAIT(MIN_IN_WAIT_CYCLES),
                  .MAX_WAIT(MAX_IN_WAIT_CYCLES),
-                 .HAS_LAST(1'b0),
+                 .HAS_LAST(1'b1),
                  .NAME("ZNZ Input")
                  )
   znz_drv;
