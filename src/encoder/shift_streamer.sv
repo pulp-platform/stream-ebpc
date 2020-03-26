@@ -80,7 +80,7 @@ always_comb begin : fsm
     full: begin
       vld_o  = 1'b1;
       // For this to work, the flush_i has to be applied until idle_o goes high (as it is done in ebpc_encoder)!
-      last_o = flush_i && (shift_cnt_q == DATA_W);
+      last_o = flush_i && (shift_cnt_q == 'd0);
       if (rdy_i) begin
         rdy_o       = 1'b1;
         if (vld_i) begin
@@ -94,6 +94,8 @@ always_comb begin : fsm
           stream_reg_d      = {stream_reg_q[DATA_W-1:0], {DATA_W{1'b0}}};
             if (shift_cnt_q == 'd0)
               st_d = empty;
+            else if (flush_i)
+              st_d = flush;
             else
               st_d   = filling;
           end // else: !if(vld_i)
