@@ -59,8 +59,11 @@ module zrle
           end else begin
             zero_cnt_d = zero_cnt_q + 1;
           end
-          if (flush_i)
-            state_d = flush;
+          if (flush_i) begin
+            if (is_one_i)
+              state_d = flush;
+            else
+              state_d = flush_zeros;
         end
       end // case: empty
       filling : begin
