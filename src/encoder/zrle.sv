@@ -64,6 +64,7 @@ module zrle
               state_d = flush;
             else
               state_d = flush_zeros;
+          end
         end
       end // case: empty
       filling : begin
