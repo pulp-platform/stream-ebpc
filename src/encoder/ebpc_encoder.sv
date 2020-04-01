@@ -189,6 +189,9 @@ module ebpc_encoder
           flush = 1'b1;
         else
           state_d = idle;
+      end // case: flush_st
+      default : begin
+        state_d = idle;
       end
     endcase // case (state_q)
     if (incr_block_cnt)
