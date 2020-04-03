@@ -30,7 +30,7 @@ module ebpc_encoder
    );
 
 
-  logic                      bpc_encoder_clk;
+  //logic                      bpc_encoder_clk;
 
 
   logic [DATA_W-1:0]         data_reg_d, data_reg_q;
@@ -220,17 +220,17 @@ module ebpc_encoder
   end // block: sequential
 
 
-  pulp_clock_gating
-    bpc_clk_gate_i (
-                    .clk_i(clk_i),
-                    .en_i(vld_to_bpc || bpc_vld_o || (!bpc_waiting && !bpc_idle) || state_q == flush_st),
-                    .test_en_i(1'b0),
-                    .clk_o(bpc_encoder_clk)
-                    );
+  // pulp_clock_gating
+  //   bpc_clk_gate_i (
+  //                   .clk_i(clk_i),
+  //                   .en_i(vld_to_bpc || bpc_vld_o || (!bpc_waiting && !bpc_idle) || state_q == flush_st),
+  //                   .test_en_i(1'b0),
+  //                   .clk_o(bpc_encoder_clk)
+  //                   );
 
   bpc_encoder
     bpc_encoder_i (
-                   .clk_i(bpc_encoder_clk),
+                   .clk_i(clk_i),
                    .rst_ni(rst_ni),
                    .data_i(data_to_bpc),
                    .flush_i(flush),
