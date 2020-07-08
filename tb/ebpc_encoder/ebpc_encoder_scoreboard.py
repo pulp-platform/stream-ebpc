@@ -35,7 +35,18 @@ class EBPCEncoderScoreboard:
         self.max_zrle_len = max_zrle_len
         self.curr_output = {'bpc': 0, 'znz': 0}
 
- 
+
+    def gen_zero_stimuli(self, n_inputs):
+        data_in = [0] * n_inputs
+        last_in = ([0]*(len(data_in)-1)+[1])
+        self.internal_inputs_exp['znz'] += int_list_to_binval_list(data_in, n_bits=1, signed=False)
+        self.outputs_exp['bpc'] = []
+        self.outputs_exp['znz'] = bpc.ZRLE_words(data_in, max_burst_len=self.max_zrle_len, wordwidth=self.data_w)
+        self.inputs['data'] = int_list_to_binval_list(data_in, n_bits=self.data_w, signed=True)
+        self.inputs['last'] = int_list_to_binval_list(last_in, n_bits=1, signed=False)
+        return list(zip(*self.inputs.values()))
+
+
     def gen_rand_stimuli(self, n_inputs, max_zero_block, p_zero):
         # generate random stimuli and return them as a list of (data_i, last_i) tuples
         data_in = []
@@ -106,6 +117,6 @@ class EBPCEncoderScoreboard:
         self.dut._log.info("Scoreboard: Fed {} inputs in {} cycles - input was stalled for {} cycles, bpc output was stalled for {} cycles and znz output was stalled for {} cycles. Throughput: {} words/cycle".format(len(self.inputs['last']), self.clk_cnt, self.stall_cnt['in'], self.stall_cnt['bpc'], self.stall_cnt['znz'], len(self.inputs['data'])/self.clk_cnt))
         for k in ['znz', 'bpc']:
             self.dut._log.info("Scoreboard: Read {} {} outputs with {} mismatches - {} such outputs were expected".format(len(self.outputs_act[k]), k, self.mismatches[k], len(self.outputs_exp[k])))
-        
+
         r = any(self.mismatches.values())
         return r

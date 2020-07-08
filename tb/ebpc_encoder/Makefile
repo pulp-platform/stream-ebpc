@@ -30,6 +30,8 @@ VERILOG_SOURCES +=	$(SRC_DIR)/ebpc_pkg.sv \
         $(ENC_SRC_DIR)/dbp_dbx_enc.sv \
         $(ENC_SRC_DIR)/bpc_encoder.sv \
 				$(ENC_SRC_DIR)/ebpc_encoder.sv \
+				$(ENC_SRC_DIR)/bpc_buffer.sv \
+				$(ENC_SRC_DIR)/done_gen.sv \
 				$(SRC_DIR)/clk_gate.sv \
 				$(ENC_SRC_DIR)/zrle.sv
 

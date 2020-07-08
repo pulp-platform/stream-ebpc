@@ -26,7 +26,8 @@ module ebpc_encoder
    output logic [DATA_W-1:0] bpc_data_o,
    output logic              bpc_last_o,
    output logic              bpc_vld_o,
-   input logic               bpc_rdy_i
+   input logic               bpc_rdy_i,
+   output logic              blk_done_o
    );
 
 
@@ -52,7 +53,7 @@ module ebpc_encoder
   logic                      bpc_buf_full;
 
 
-  typedef enum               {idle, running, running_killzero, wait_killzero,  wait_rdy, flush_st, last_bpc} state_t;
+  typedef enum               {idle, running, wait_rdy, flush_st, last_bpc} state_t;
   // 0: waiting for packer
   // 1: waiting for bpc
   logic                      wait_rdy_d, wait_rdy_q;
@@ -220,13 +221,6 @@ module ebpc_encoder
   end // block: sequential
 
 
-  // pulp_clock_gating
-  //   bpc_clk_gate_i (
-  //                   .clk_i(clk_i),
-  //                   .en_i(vld_to_bpc || bpc_vld_o || (!bpc_waiting && !bpc_idle) || state_q == flush_st),
-  //                   .test_en_i(1'b0),
-  //                   .clk_o(bpc_encoder_clk)
-  //                   );
 
   bpc_encoder
     bpc_encoder_i (
@@ -274,5 +268,17 @@ module ebpc_encoder
             .rdy_i(znz_rdy_i),
             .idle_o(znz_idle)
             );
+
+  done_gen
+    done_gen_i(
+               .clk_i(clk_i),
+               .rst_ni(rst_ni),
+               .vld_to_znz_i(vld_to_znz),
+               .znz_last_i(znz_last_o),
+               .bpc_idle_i(bpc_idle),
+               .bpc_last_i(bpc_last_o),
+               .bpc_was_last_i(bpc_was_last),
+               .blk_done_o(blk_done_o)
+               );
 
 endmodule // ebpc_encoder

@@ -8,6 +8,7 @@ import torchvision as tv
 import numpy as np
 import random
 import math
+from tqdm import tqdm
 import common.bpc as bpc
 from common.util import zero_pad_list, write_sim_file, split_str
 
@@ -43,22 +44,25 @@ def getModel(modelName, epoch=None):
     return model, device
 
 
-def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=1.0, frac=0.01):
+def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=1.0, frac=0.01, dataLoader=None):
+    #dataLoader can be passed to allow feature map collection in multiple
+    #iterations - otherwise the RAM usage gets humongous for larger experiments
 
     # CREATE DATASET LOADERS
     #import quantLab.quantlab.ImageNet.preprocess as pp
     #datasetTrain, datasetVal, _ =
     #pp.load_datasets('/scratch/datasets/ilsvrc12/', augment=False)
-    transform = tv.transforms.Compose([
+    if dataLoader is None:
+        transform = tv.transforms.Compose([
         tv.transforms.Resize(256),
-        tv.transforms.RandomCrop(224),
-        tv.transforms.ToTensor()
-    ])
-    dataset = tv.datasets.ImageFolder(datasetPath, transform=transform)
-#    dataset = datasetVal
+            tv.transforms.RandomCrop(224),
+            tv.transforms.ToTensor()
+        ])
+        dataset = tv.datasets.ImageFolder(datasetPath, transform=transform)
+        dataLoader = torch.utils.data.DataLoader(dataset, batch_size=batchSize, shuffle=True)
     model.eval()
 
-    dataLoader = torch.utils.data.DataLoader(dataset, batch_size=batchSize, shuffle=True)
+
 
     # SELECT MODULES
     msReLU = list(filter(lambda m: type(m) == torch.nn.modules.ReLU or type(m) == torch.nn.modules.ReLU6, model.modules()))
@@ -76,7 +80,7 @@ def getFMs(model, device, datasetPath, numBatches=1, batchSize=10, safetyFactor=
       outputs = []
       outputs_f = []
       def hook(module, input, output):
-          fm = output.detach().contiguous().clone()
+          fm = output.detach().contiguous().clone().to('cpu')
           #fm_q, _, dtype = bpc.quantize(fm, quant='fixed{}'.format(quant), safetyFactor=safetyFactor, normalize=True)
           outputs_f.append(filter_fmaps(fm, frac))
           outputs.append(fm)

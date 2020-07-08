@@ -72,7 +72,31 @@ def random_inputs(dut):
     if sb.report():
         raise TestFailure("Scoreboard reported problems - check log!")
 
+
 @cocotb.test()
+def all_zeros(dut):
+    drv = EBPCEncoderDriver(dut, TA, TT)
+    sb = EBPCEncoderScoreboard(dut, BLOCK_SIZE, DATA_W, MAX_ZRLE_LEN)
+    mon = EBPCEncoderMonitor(dut, sb, TA, TT)
+    inputs = sb.gen_zero_stimuli(4000)
+    drv.apply_defaults()
+    cocotb.fork(Clock(dut.clk_i, CLOCK_PERIOD).start())
+    yield reset_dut(dut.rst_ni, RESET_TIME)
+    dut._log.info("Reset Done!")
+    yield wait_cycles(dut.clk_i, 4)
+    mon.start()
+    bpc_read_task = cocotb.fork(drv.read_bpc_outputs(len(inputs)*2, tmin=0, tmax=0))
+    znz_read_task = cocotb.fork(drv.read_znz_outputs(len(inputs)*2, tmin=0, tmax=0))
+    cocotb.fork(drv.drive_input(inputs, tmin=0, tmax=0))
+    yield mon.wait_done()
+    bpc_read_task.kill()
+    znz_read_task.kill()
+    mon.stop()
+    yield wait_cycles(dut.clk_i, 4)
+    if sb.report():
+        raise TestFailure("Scoreboard reported problems - check log!")
+
+@cocotb.test(skip=True)
 def fmap_inputs(dut):
     drv = EBPCEncoderDriver(dut, TA, TT)
     sb = EBPCEncoderScoreboard(dut, BLOCK_SIZE, DATA_W, MAX_ZRLE_LEN)

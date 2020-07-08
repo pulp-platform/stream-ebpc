@@ -32,7 +32,8 @@ module bpc_buffer
 
     case(state_q)
       empty : begin
-        // if was_last_i is high in empty state, things are really weird
+        // if was_last_i is high in empty state, things are really weird (or
+        // we're doing all zeros)
         assert (~was_last_i) else $warning("Assertion failed in bpc_buffer in state empty - was_last_i is high!");
         rdy_o = 1'b1;
         if (vld_i) begin
