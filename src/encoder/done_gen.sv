@@ -4,9 +4,12 @@ module done_gen
    input logic  rst_ni,
    input logic  vld_to_znz_i,
    input logic  znz_last_i,
+   input logic  znz_hs_active_i,
    input logic  bpc_idle_i,
    input logic  bpc_last_i,
+   input logic  bpc_last_hs_active_i,
    input logic  bpc_was_last_i,
+   input logic  bpc_was_last_hs_active_i,
    output logic blk_done_o
    );
 
@@ -25,38 +28,38 @@ module done_gen
       wait_for_znz_and_bpc_was_last : begin
         if (~bpc_idle_i && ~znz_last_i)
           state_d = wait_for_znz_and_bpc_last;
-        else if (~bpc_idle_i && znz_last_i)
+        else if (~bpc_idle_i && znz_last_i && znz_hs_active_i)
           state_d = wait_for_bpc_last;
-        else if (bpc_idle_i && bpc_was_last_i)
+        else if (bpc_idle_i && bpc_was_last_i && bpc_was_last_hs_active_i)
           state_d = wait_for_znz_last;
-        else if (znz_last_i)
+        else if (znz_last_i && znz_hs_active_i)
           state_d = wait_for_bpc_was_last;
       end
       wait_for_znz_and_bpc_last : begin
-        if (znz_last_i && bpc_last_i) begin
+        if (znz_last_i && znz_hs_active_i && bpc_last_i && bpc_last_hs_active_i) begin
           blk_done_o = 1'b1;
           state_d    = idle;
-        end else if (znz_last_i)
+        end else if (znz_last_i && znz_hs_active_i)
           state_d = wait_for_bpc_last;
-        else if (bpc_last_i)
+        else if (bpc_last_i && bpc_last_hs_active_i)
           state_d = wait_for_znz_last;
       end
       wait_for_bpc_was_last : begin
         if (~bpc_idle_i)
           state_d = wait_for_bpc_last;
-        else if (bpc_was_last_i) begin
+        else if (bpc_was_last_i && bpc_was_last_hs_active_i) begin
           blk_done_o = 1'b1;
           state_d    = idle;
         end
       end
       wait_for_znz_last : begin
-        if (znz_last_i) begin
+        if (znz_last_i && znz_hs_active_i) begin
           blk_done_o = 1'b1;
           state_d    = idle;
         end
       end
       wait_for_bpc_last : begin
-        if (bpc_last_i) begin
+        if (bpc_last_i && bpc_last_hs_active_i) begin
           blk_done_o = 1'b1;
           state_d    = idle;
         end

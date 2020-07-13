@@ -275,9 +275,12 @@ module ebpc_encoder
                .rst_ni(rst_ni),
                .vld_to_znz_i(vld_to_znz),
                .znz_last_i(znz_last_o),
+               .znz_hs_active_i(znz_vld_o && znz_rdy_i),
                .bpc_idle_i(bpc_idle),
                .bpc_last_i(bpc_last_o),
+               .bpc_last_hs_active_i(bpc_vld_o && bpc_rdy_i),
                .bpc_was_last_i(bpc_was_last),
+               .bpc_was_last_hs_active_i((vld_from_bpc && rdy_to_bpc) || ~bpc_buf_full),
                .blk_done_o(blk_done_o)
                );
 
